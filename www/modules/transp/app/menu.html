@@ -1,0 +1,55 @@
+<ion-side-menus>
+
+    <ion-pane ion-side-menu-content>
+        <ion-nav-bar class="bar-stable" align-title="left">
+            <ion-nav-buttons side="left">
+                <button menu-toggle class="button button-icon icon ion-navicon"></button>
+            </ion-nav-buttons>
+        </ion-nav-bar>
+        <ion-nav-view name="menuContent" animation="slide-left-right" title="">
+        </ion-nav-view>
+    </ion-pane>
+
+    <ion-side-menu side="left">
+        <header class="bar bar-header bar-stable">
+            <div class="title">Emve</div>
+        </header>
+        <ion-content class="has-header">
+            <div class="list">
+                <div class="item item-divider">
+                    {{ name }}
+                </div>
+                <a class="item item-icon-left" nav-clear menu-close ng-click="$state.go('client.custom-order')">
+                    <i class="icon ion-model-s dark"></i>
+                    Switch to client app
+                </a>
+                <div class="item item-divider"></div>
+                <a class="item item-icon-left" nav-clear menu-close ng-click="$state.go('transp.map')">
+                    <i class="icon ion-map dark"></i>
+                    Map
+                </a>
+                <a class="item item-icon-left" nav-clear menu-close ng-show="curr_order" ui-sref="transp.curr-order.map({orderId: curr_order.id})">
+                    <i class="icon ion-disc dark"></i>
+                    Current order
+                </a>
+                <a class="item item-icon-left" nav-clear menu-close ng-click="$state.go('transp.order-list')">
+                    <i class="icon ion-compose"></i>
+                    Orders
+                </a>
+                <a class="item item-icon-left" nav-clear menu-close ui-sref="transp.order-history-list">
+                    <i class="icon ion-bag"></i>
+                    Order history
+                </a>
+                <div class="item item-divider"></div>
+                <a class="item item-icon-left" href="">
+                    <i class="icon ion-help-buoy"></i>
+                    Support
+                </a>
+                <a class="item item-icon-left" nav-clear menu-close ng-click="$state.go('client.settings')">
+                    <i class="icon ion-gear-a"></i>
+                    Settings
+                </a>
+            </div>
+        </ion-content>
+    </ion-side-menu>
+</ion-side-menus>

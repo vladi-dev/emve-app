@@ -1,0 +1,25 @@
+<ion-view view-title="Complete Order" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-left" ui-sref="transp.curr-order.map">
+            Back
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content padding="true">
+        <form name="processAmountForm" ng-submit="tryProcessAmount({orderId: order.id})" novalidate="">
+            <div class="list">
+                <p>Please enter recept amount</p>
+                <label class="item item-input">
+                    <i class="icon ion-social-usd"></i>
+                    <input type="text" ng-model="processAmountData.amount">
+                </label>
+
+                <div>
+                    <button class="button button-block button-positive" type="submit">Next</button>
+                    <p align="center">- or -</p>
+                    <button class="button button-block button-calm" type="submit">Get paid by time spent</button>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

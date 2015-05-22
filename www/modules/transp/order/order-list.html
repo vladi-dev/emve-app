@@ -1,0 +1,21 @@
+<ion-view view-title="Orders" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <ion-list>
+            <label class="item item-input" ng-hide="orders.length">
+                No orders.
+            </label>
+            <ion-item class="item item-icon-right" ng-repeat="o in orders" type="list-inset" ui-sref="transp.order({orderId: o.id})">
+                <i class="icon ion-chevron-right"></i>
+                <h2>#{{o.id}}</h2>
+                <p>Order: {{o.order}}</p>
+                <p>Pickup Address: {{o.pickup_address}}</p>
+                <p>Order Address: {{o.order_address}}</p>
+                <p>Special Instructions: {{o.special_instructions}}</p>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

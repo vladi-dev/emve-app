@@ -1,0 +1,30 @@
+<ion-view view-title="Order Summary" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-left" ui-sref="transp.complete-order-step1({orderId: order.id})">
+            Back
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content padding="true">
+        <h3>Order Summary</h3>
+        <p>Total purchases from recepts: ${{ fees.amount }}</p>
+        <p>20% Total fee: ${{ fees.total_fee }}</p>
+        <p>Total amount: ${{ fees.total_amount }}</p>
+        <p>Transporter fee: ${{ fees.transp_fee }}</p>
+        <p>Service fee: ${{ fees.service_fee }}</p>
+
+        <form name="completeOrderForm" ng-submit="tryCompleteOrder()" novalidate="">
+            <div class="list">
+                <p>Please have customer enter their PIN to complete payment.</p>
+                <label class="item item-input">
+                    <i class="icon ion-lock-combination"></i>
+                    <input type="text" ng-model="completeOrderData.pin">
+                </label>
+
+                <div>
+                    <button class="button button-block button-positive" type="submit">Complete</button>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,13 @@
+<ion-view >
+    <ion-tabs class="tabs-icon-top">
+        <ion-tab title="Track" ui-sref="client.curr-order-accepted.track(order.id)" icon-on="ion-ios-world" icon-off="ion-ios-world-outline">
+            <ion-nav-view name="track"></ion-nav-view>
+        </ion-tab>
+        <ion-tab title="Details" ui-sref="client.curr-order-accepted.details(order.id)" icon-on="ion-ios-list" icon-off="ion-ios-list-outline">
+            <ion-nav-view name="details"></ion-nav-view>
+        </ion-tab>
+        <ion-tab title="Messages" ui-sref="client.curr-order-accepted.messages(order.id)" icon-on="ion-ios-chatboxes" icon-off="ion-ios-chatboxes-outline" badge="3" badge-style="badge-assertive">
+            <ion-nav-view name="messages"></ion-nav-view>
+        </ion-tab>
+    </ion-tabs>
+</ion-view>

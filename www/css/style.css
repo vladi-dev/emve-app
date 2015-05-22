@@ -1,0 +1,23 @@
+.scroll, .angular-leaflet-map {
+    height: 80%;
+}
+
+#flash-messages {
+    background-color: rgba(0, 200, 0, 0.75);
+    text-align: left;
+    width: 100%;
+    color: white;
+    font-weight: 600;
+}
+
+ol > li a {
+    padding: 5px 15px;
+    line-height: 15px;
+}
+
+ol > li a {
+    display: inline-block;
+    text-decoration: none;
+    width: 100%;
+    padding: 0 15px;
+}

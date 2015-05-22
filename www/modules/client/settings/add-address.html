@@ -1,0 +1,43 @@
+<ion-view view-title="" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-left" ng-click="$state.go('client.settings-address')">Add Address</button>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <form name="addAddressForm" ng-submit="saveAddress()" novalidate="">
+            <div class="list">
+                <label class="item item-input">
+                    <input type="text" name="label" placeholder="Label" ng-model="newAddressData.label">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" name="house" placeholder="House" ng-model="newAddressData.house">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" name="street" placeholder="Street" ng-model="newAddressData.street">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" name="unit" placeholder="Unit" ng-model="newAddressData.unit">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" name="city" placeholder="City" ng-model="newAddressData.city">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" name="state" placeholder="State" ng-model="newAddressData.state">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" name="zip" placeholder="Zip" ng-model="newAddressData.zip">
+                </label>
+
+                <div>
+                    <button class="button button-block button-positive" type="submit">Next</button>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,21 @@
+<ion-view view-title="Order Details">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-left" ui-sref="transp.order-history-list">
+            Back
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <p><strong>Order:</strong> {{order.order}}</p>
+        <p><strong>Pickup address:</strong> {{order.pickup_address}}</p>
+        <p><strong>Order address:</strong> {{order.order_address}}</p>
+        <p><strong>Special instructions:</strong> {{order.special_instructions}}</p>
+        <p><strong>Contact phone:</strong> {{order.phone}}</p>
+        <p><strong>Total purchases from recepts:</strong> ${{ order.amount }}</p>
+        <p><strong>20% Total fee:</strong> ${{ order.total_fee }}</p>
+        <p><strong>Total amount:</strong> ${{ order.total_amount }}</p>
+        <p><strong>Transporter fee:</strong> ${{ order.transp_fee }}</p>
+        <p><strong>Service fee:</strong> ${{ order.service_fee }}</p>
+
+    </ion-content>
+</ion-view>

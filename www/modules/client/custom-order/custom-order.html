@@ -1,0 +1,53 @@
+<ion-view view-title="Custom Order" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content>
+        <form ng-submit="tryAddCustomOrder(customOrderForm)" name="customOrderForm" novalidate="">
+            <div class="list">
+                <div class="item item-divider">
+                    Order
+                </div>
+                <label class="item item-input">
+                    <textarea type="text" name="order" placeholder="Order" ng-model="customOrderData.order"></textarea>
+                </label>
+
+                <div class="item item-divider">
+                    Special Instructions
+                </div>
+                <label class="item item-input">
+                    <textarea type="text" name="special_instructions" placeholder="Special Instructions"
+                              ng-model="customOrderData.special_instructions"></textarea>
+                </label>
+
+                <div class="item item-divider">
+                    Pickup Address
+                </div>
+                <label class="item item-input">
+                    <input type="text" name="pickup_address" placeholder="Pickup address"
+                           ng-model="customOrderData.pickup_address">
+                </label>
+
+                <div class="item item-divider">
+                    Order Address
+                </div>
+
+                <ion-radio ng-repeat="address in orderAddresses"
+                           ng-value="address.id"
+                           ng-model="customOrderData.user_address_id"
+                           >
+                    {{ address.label }}
+                    {{ address.address }}
+                </ion-radio>
+
+                <label class="item item-input">
+                    <button class="button button-positive icon ion-ios-plus-empty" type="button" ng-click="$state.go('client.settings-add-address')">Add Address</button>
+                </label>
+
+                <div>
+                    <button class="button button-block button-positive" type="submit">Make order</button>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

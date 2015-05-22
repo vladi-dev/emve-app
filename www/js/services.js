@@ -1,0 +1,153 @@
+'use strict';
+
+angular.module('emve.services', ['ngResource'])
+    .factory('authInterceptor', function ($rootScope, $q, $window) {
+        return {
+            request: function (config) {
+                $rootScope.$broadcast('loading:show');
+
+                config.headers = config.headers || {};
+                if ($window.sessionStorage.token) {
+                    config.headers.Authorization = 'JWT ' + $window.sessionStorage.token;
+                }
+                return config;
+            },
+            response: function (response) {
+                $rootScope.$broadcast('loading:hide');
+                return response || $q.when(response);
+            },
+            responseError: function (response) {
+                $rootScope.$broadcast('loading:hide');
+
+                if (response.status === 401) {
+                    // handle the case where the user is not authenticated
+                    $rootScope.$state.go('login');
+                }
+
+                return $q.reject(response);
+            }
+        };
+    })
+    .factory('CurrentUser', function ($resource, API_URL) {
+        return $resource(API_URL + '/users', {}, {
+            patch: {
+                method: 'PATCH'
+            }
+        });
+    })
+    .factory('UsersAddresses', function ($resource, API_URL) {
+        return $resource(API_URL + '/users/addresses/:userAddressId', {}, {
+            put: {
+                method: 'PUT'
+            }
+        });
+    })
+    .factory('ClientOrders', function ($resource, API_URL) {
+        return $resource(API_URL + '/client/orders/:orderId', {}, {
+            put: {
+                method: 'PUT'
+            }
+        });
+    })
+    .factory('TranspOrders', function ($resource, API_URL) {
+        return $resource(API_URL + '/transp/orders/:orderId', {orderId: '@orderId'}, {
+            put: {
+                method: 'PUT'
+            },
+            'accept': {
+                method: 'POST',
+                params: {act: 'accept'}
+            },
+            'complete': {
+                method: 'POST',
+                params: {act: 'complete'}
+            }
+        });
+    })
+    .factory('NewAddress', function () {
+        var _newAddress = {};
+
+        return {
+            get: function () {
+                return _newAddress;
+            },
+            set: function (newAddress) {
+                _newAddress = newAddress;
+            }
+        }
+    })
+    .factory('WebsocketService', function ($window, $ionicPopup, $rootScope, $state, WEBSOCKET_URL) {
+        var socket = null;
+
+        return {
+            start: function () {
+                if (socket || $window.sessionStorage.token == void 0) {
+                    return;
+                }
+
+                var token = $window.sessionStorage.token;
+                var wsUri = WEBSOCKET_URL + '?token=' + token;
+                socket = new ReconnectingWebSocket(wsUri);
+
+                socket.onopen = function () {
+                    console.log('connected');
+                }
+
+                socket.onclose = function () {
+                    console.log('closed');
+                }
+
+                socket.onmessage = function (evt) {
+                    var data = JSON.parse(evt.data);
+                    console.log('On message:');
+                    console.log(data);
+
+                    $rootScope.$emit(data.event, data);
+
+                    switch (data.event) {
+                        case 'client_order_accepted':
+                            $ionicPopup.alert({
+                                title: 'Order accepted',
+                                template: 'Your order was accepted',
+                                okText: 'View Order'
+                            }).then(function (res) {
+                                $state.go('client.curr-order-accepted.track', {orderId: data.order.id});
+                            });
+                            break;
+
+                        case 'client_order_completed':
+                            $ionicPopup.alert({
+                                title: 'Order completed',
+                                template: 'Your order was completed',
+                                okText: 'View Order'
+                            }).then(function (res) {
+                                $state.go('client.order-history-details', {orderId: data.order.id});
+                            });
+                            break;
+                    }
+                };
+            },
+            close: function () {
+                if (socket) {
+                    socket.close();
+                    socket = null;
+                }
+            },
+            getSocket: function () {
+                return socket;
+            }
+        }
+    })
+    .factory('RecentPosition', function () {
+        var _pos = null;
+
+        return {
+            set: function (pos) {
+                _pos = pos;
+            },
+            get: function () {
+                return _pos;
+            }
+        }
+    })
+;

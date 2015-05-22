@@ -1,0 +1,31 @@
+<ion-view view-title="" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-left" ng-click="$state.go('client.settings')"
+                nav-direction="back">Change name
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <flash:messages></flash:messages>
+        <form ng-submit="tryUpdateName(updateNameForm)" name="updateNameForm" novalidate="">
+            <div class="list">
+                <label class="item item-input">
+                    <input type="text" name="first_name" placeholder="First Name" ng-model="userData.first_name">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" name="middle_name" placeholder="Middle Name" ng-model="userData.middle_name">
+                </label>
+                
+                <label class="item item-input">
+                    <input type="text" name="last_name" placeholder="Last Name" ng-model="userData.last_name">
+                </label>
+
+
+                <div>
+                    <button class="button button-block button-positive" type="submit">Update name</button>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

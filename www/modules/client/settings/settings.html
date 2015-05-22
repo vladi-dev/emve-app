@@ -1,0 +1,52 @@
+<ion-view view-title="Settings" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <div class="list">
+            <div class="item item-divider">
+                Your profile
+            </div>
+            <a class="item item-icon-left" ng-click="$state.go('client.settings-name')">
+                <i class="icon ion-person dark"></i>
+                Change name
+            </a>
+            <a class="item item-icon-left" href="" ng-click="$state.go('client.settings-address')">
+                <i class="icon ion-home dark"></i>
+                Addresses
+            </a>
+            <a class="item item-icon-left" ng-click="$state.go('client.settings-phone')">
+                <i class="icon ion-ios-telephone dark"></i>
+                Phone number
+            </a>
+            <a class="item item-icon-left" href="">
+                <i class="icon ion-card dark"></i>
+                Payment
+            </a>
+
+            <div class="item item-divider">
+                Your account
+            </div>
+            <a class="item item-icon-left" href="">
+                <i class="icon ion-at dark"></i>
+                Change email
+            </a>
+            <a class="item item-icon-left" href="">
+                <i class="icon ion-locked dark"></i>
+                Change password
+            </a>
+            <a class="item item-icon-left" ng-click="doLogout();">
+                <i class="icon ion-log-out dark"></i>
+                Logout
+            </a>
+
+            <div class="item item-divider">Transporters Only</div>
+            <a class="item item-icon-left" nav-clear menu-close ui-sref="transp.map">
+                <i class="icon ion-model-s dark"></i>
+                Switch to transporter app
+            </a>
+
+        </div>
+    </ion-content>
+</ion-view>

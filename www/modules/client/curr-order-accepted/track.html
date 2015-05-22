@@ -1,0 +1,17 @@
+<ion-view view-title="Current Order" hide-back-button="true">
+    <ion-content>
+        <leaflet data-tap-disabled="true" id="transp_curr_order_map" center="center" markers="markers" defaults="defaults"></leaflet>
+
+        <div class="list card">
+            <div class="item item-avatar">
+                <img src="img/transp_avatar.jpg" alt=""/>
+                <h2>{{ order.transporter.name }}</h2>
+                <p>5 starz (49)</p>
+            </div>
+            <a class="item item-icon-left assertive" href="#">
+                <i class="icon ion-lock-combination"></i>
+                Your PIN: {{ order.pin }}
+            </a>
+        </div>
+    </ion-content>
+</ion-view>
