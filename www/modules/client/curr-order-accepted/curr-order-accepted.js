@@ -4,34 +4,43 @@ angular.module('emve')
     .config(function ($stateProvider) {
         $stateProvider
             .state('client.curr-order-accepted', {
-                url: "/curr-order-accepted/:orderId",
+                url: "/curr-order-accepted",
                 abstract: true,
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/client/curr-order-accepted/curr-order-accepted.html",
-                        controller: "ClientCurrOrderAcceptedCtrl"
+                        templateUrl: "modules/client/curr-order-accepted/curr-order-accepted.html"
                     }
                 }
             })
             .state('client.curr-order-accepted.track', {
-                url: "/track",
+                url: "/track/{orderId:int}",
                 views: {
                     'track': {
                         templateUrl: "modules/client/curr-order-accepted/track.html",
                         controller: "ClientCurrOrderAcceptedTrackCtrl"
                     }
+                },
+                resolve: {
+                    getOrder: function ($stateParams, ClientOrders) {
+                        return ClientOrders.get({orderId: $stateParams.orderId});
+                    }
                 }
             })
             .state('client.curr-order-accepted.details', {
-                url: "/details",
+                url: "/details/{orderId:int}",
                 views: {
                     'details': {
                         templateUrl: "modules/client/curr-order-accepted/details.html"
                     }
+                },
+                resolve: {
+                    getOrder: function ($stateParams, ClientOrders) {
+                        return ClientOrders.get({orderId: $stateParams.orderId});
+                    }
                 }
             })
             .state('client.curr-order-accepted.messages', {
-                url: "/messages",
+                url: "/messages/{orderId:int}",
                 views: {
                     'messages': {
                         templateUrl: "modules/client/curr-order-accepted/messages.html"
@@ -43,15 +52,9 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('ClientCurrOrderAcceptedCtrl', function ($scope, $stateParams, ClientOrders) {
-        $scope.getOrder = ClientOrders.get({orderId: $stateParams.orderId}, function (data) {
-            $scope.order = data.order;
-        });
-    })
-    .controller('ClientCurrOrderAcceptedTrackCtrl', function ($rootScope, $scope, leafletData) {
-
+    .controller('ClientCurrOrderAcceptedTrackCtrl', function ($rootScope, $scope, leafletData, getOrder, $stateParams) {
         angular.extend($scope, {
-            center:{
+            center: {
                 lat: 34.1625,
                 lng: -118.4659,
                 zoom: 11
@@ -65,7 +68,9 @@ angular.module('emve.controllers')
             markers: {}
         });
 
-        $scope.getOrder.$promise.then(function () {
+        getOrder.$promise.then(function (data) {
+            console.log(data);
+            $scope.order = data.order;
             $scope.markers[0] = {
                 lat: $scope.order.lat,
                 lng: $scope.order.lng,
@@ -79,24 +84,41 @@ angular.module('emve.controllers')
             };
 
             var centered = false;
-            leafletData.getMap('transp_curr_order_map').then(function (map) {
-                $scope.offTrackEvent = $rootScope.$on('track', function (event, data) {
-                    console.log('transp_pos');
-                    $scope.markers[1] = {
+            $scope.offTrackEvent = $rootScope.$on('track', function (event, data) {
+                if (data.order_id != $scope.order.id) {
+                    return;
+                }
+
+                $scope.markers[1] = {
+                    lat: data.pos.latitude,
+                    lng: data.pos.longitude,
+                    message: 'Transporter'
+                };
+
+                if (!centered) {
+                    centered = true;
+                    $scope.center = {
                         lat: data.pos.latitude,
                         lng: data.pos.longitude,
-                        message: 'Transporter'
+                        zoom: 11
                     };
+                }
+            });
+        });
 
-                    if (!centered) {
-                        centered = true;
-                        $scope.center = {
-                            lat: data.pos.latitude,
-                            lng: data.pos.longitude,
-                            zoom: 11
-                        };
-                    }
-                });
+        $scope.$on('$destroy', function () {
+            leafletData.unresolveMap();
+
+            if ($scope.offTrackEvent != void 0) {
+                $scope.offTrackEvent();
+                $scope.offTrackEvent = null;
+            }
+
+            angular.extend($scope, {
+                center: null,
+                defaults: null,
+                markers: {},
+                order: null
             });
         });
     })

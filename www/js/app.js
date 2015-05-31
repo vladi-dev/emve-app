@@ -58,9 +58,9 @@ angular.module('emve', ['ionic', 'ngCordova', 'emve.controllers', 'emve.services
         $httpProvider.interceptors.push('authInterceptor');
         $urlRouterProvider.otherwise('/');
     })
-    .constant('API_URL', 'http://emve.dev:5000/api')
-    .constant('WEBSOCKET_URL', 'ws://emve.dev:5000/websocket')
+    //.constant('API_URL', 'http://emve.dev:5000/api')
+    //.constant('WEBSOCKET_URL', 'ws://emve.dev:5000/websocket')
 
-    //.constant('API_URL', 'http://emvela.com/api')
-    //.constant('WEBSOCKET_URL', 'ws://emvela.com/websocket')
+    .constant('API_URL', 'http://emvela.com/api')
+    .constant('WEBSOCKET_URL', 'ws://emvela.com/websocket')
 ;

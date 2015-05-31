@@ -20,7 +20,8 @@
                     {{ name }}
                 </div>
 
-                <a class="item" nav-clear menu-close ng-repeat="order in curr_orders" ui-sref="{{order.status.name == 'new' && 'client.curr-order-new({orderId: order.id})' || 'client.curr-order-accepted.track({orderId: order.id})'}}">
+                <a class="item" nav-clear menu-close ng-repeat="order in curr_orders"
+                   ui-sref="{{order.status.name == 'new' && 'client.curr-order-new({orderId: order.id})' || 'client.curr-order-accepted.track({orderId: order.id})'}}">
                     {{order.order}}
                     <span class="item-note dark">{{order.status.name}}</span>
                 </a>
@@ -39,6 +40,7 @@
                     <i class="icon ion-bag dark"></i>
                     Order history
                 </a>
+
                 <div class="item item-divider"></div>
                 <a class="item item-icon-left" href="">
                     <i class="icon ion-help-buoy dark"></i>

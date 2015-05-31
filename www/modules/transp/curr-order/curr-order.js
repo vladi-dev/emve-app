@@ -115,7 +115,7 @@ angular.module('emve.controllers')
             console.log('controller destroyed');
             leafletData.unresolveMap('transp_curr_order_map');
 
-            if (typeof $scope.offTranspPos != void 0) {
+            if ($scope.offTranspPos != void 0) {
                 $scope.offTranspPos();
                 $scope.offTranspPos = null;
             }
