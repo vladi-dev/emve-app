@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('emve', ['ionic', 'ngCordova', 'emve.controllers', 'emve.services', 'flash', 'uiGmapgoogle-maps', 'leaflet-directive'])
+angular.module('emve', ['ionic', 'ngCordova', 'emve.controllers', 'emve.services', 'flash', 'leaflet-directive'])
     .run(function ($ionicPlatform, $rootScope, $state, $window, $stateParams, $ionicLoading, WebsocketService, $ionicPopup, $cordovaNetwork) {
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
