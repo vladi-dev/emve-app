@@ -30,14 +30,14 @@ angular.module('emve.controllers')
         TranspOrders.get({'view': 'new'}, function (data) {
             $scope.orders = data.orders;
 
-            $rootScope.$on('new_order', function (event, data) {
+            $rootScope.$on('raven:new_order', function (event, data) {
                 $scope.$apply(function () {
                     $scope.orders.push(data.order);
                 });
             });
 
-            $rootScope.$on('remove_order', function (event, data) {
-                console.log('remove_order');
+            $rootScope.$on('raven:order_remove', function (event, data) {
+                console.log('raven:order_remove');
                 angular.forEach($scope.orders, function (order, idx) {
 
                     if (order.id == data.order_id) {
@@ -163,7 +163,7 @@ angular.module('emve.controllers')
 
         $scope.tryAccept = function () {
             TranspOrders.accept({orderId: $stateParams.orderId}, function (data) {
-                $rootScope.$broadcast('transp_order_accepted', data);
+                $rootScope.$broadcast('raven:order_accepted', data);
                 $state.go('transp.curr-order.map', {orderId: data.order.id});
             }, function (error) {
                 $ionicPopup.alert({

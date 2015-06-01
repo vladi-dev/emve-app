@@ -62,7 +62,7 @@ angular.module('emve.controllers')
             TranspOrders.complete({'orderId': $scope.order.id, 'amount': $scope.fees.amount, 'pin': $scope.completeOrderData.pin, 'act': 'complete'}, function (data) {
                 if (data.success) {
                     console.log($scope.order);
-                    $rootScope.$broadcast('transp_order_completed');
+                    $rootScope.$broadcast('raven:order_completed');
                     $state.go('transp.complete-order-step3', {orderId: $scope.order.id});
                 }
             }, function (error) {

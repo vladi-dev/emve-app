@@ -54,7 +54,7 @@ angular.module('emve.controllers')
         var centered = false;
         leafletData.getMap('transp_map').then(function (map) {
             console.log('map get map');
-            $rootScope.$on('transp_pos', function (event, position) {
+            $scope.offTranspPos = $rootScope.$on('transp_pos', function (event, position) {
                 $scope.markers[0] = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
@@ -74,6 +74,11 @@ angular.module('emve.controllers')
 
         $scope.$on('$destroy', function () {
             leafletData.unresolveMap('transp_map');
+
+            if (typeof $scope.offTranspPos === 'function') {
+                $scope.offTranspPos();
+                $scope.offTranspPos = null;
+            }
 
             angular.extend($scope, {
                 center: null,

@@ -105,7 +105,7 @@ angular.module('emve.services', ['ngResource'])
                     $rootScope.$emit(data.event, data);
 
                     switch (data.event) {
-                        case 'client_order_accepted':
+                        case 'client:order_accepted':
                             $ionicPopup.alert({
                                 title: 'Order accepted',
                                 template: 'Your order was accepted',
@@ -115,7 +115,7 @@ angular.module('emve.services', ['ngResource'])
                             });
                             break;
 
-                        case 'client_order_completed':
+                        case 'client:order_completed':
                             $ionicPopup.alert({
                                 title: 'Order completed',
                                 template: 'Your order was completed',

@@ -84,7 +84,7 @@ angular.module('emve.controllers')
             };
 
             var centered = false;
-            $scope.offTrackEvent = $rootScope.$on('track', function (event, data) {
+            $scope.offTrackEvent = $rootScope.$on('client:track_order_' + $scope.order.id, function (event, data) {
                 if (data.order_id != $scope.order.id) {
                     return;
                 }

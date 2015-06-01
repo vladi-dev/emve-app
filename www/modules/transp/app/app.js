@@ -25,11 +25,11 @@ angular.module('emve.controllers')
             }
         });
 
-        $rootScope.$on('transp_order_accepted', function (event, data) {
+        $rootScope.$on('raven:order_accepted', function (event, data) {
             $scope.curr_order = data.order;
         });
 
-        $rootScope.$on('transp_order_completed', function (event, data) {
+        $rootScope.$on('raven:order_completed', function (event, data) {
             $scope.curr_order = null;
         });
 
@@ -46,7 +46,7 @@ angular.module('emve.controllers')
 
             // TODO: maybe change structure of pos, for easy marker creation on map
             var msg = {
-                'event': 'track',
+                'event': 'raven:coords_sent',
                 'pos': {'latitude': position.coords.latitude, 'longitude': position.coords.longitude}
             };
 
