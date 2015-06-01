@@ -49,8 +49,8 @@ angular.module('emve.services', ['ngResource'])
             }
         });
     })
-    .factory('TranspOrders', function ($resource, API_URL) {
-        return $resource(API_URL + '/transp/orders/:orderId', {orderId: '@orderId'}, {
+    .factory('RavenOrders', function ($resource, API_URL) {
+        return $resource(API_URL + '/raven/orders/:orderId', {orderId: '@orderId'}, {
             put: {
                 method: 'PUT'
             },

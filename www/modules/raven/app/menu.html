@@ -24,19 +24,19 @@
                     Switch to client app
                 </a>
                 <div class="item item-divider"></div>
-                <a class="item item-icon-left" nav-clear menu-close ng-click="$state.go('transp.map')">
+                <a class="item item-icon-left" nav-clear menu-close ng-click="$state.go('raven.map')">
                     <i class="icon ion-map dark"></i>
                     Map
                 </a>
-                <a class="item item-icon-left" nav-clear menu-close ng-show="curr_order" ui-sref="transp.curr-order.map({orderId: curr_order.id})">
+                <a class="item item-icon-left" nav-clear menu-close ng-show="curr_order" ui-sref="raven.curr-order.map({orderId: curr_order.id})">
                     <i class="icon ion-disc dark"></i>
                     Current order
                 </a>
-                <a class="item item-icon-left" nav-clear menu-close ng-click="$state.go('transp.order-list')">
+                <a class="item item-icon-left" nav-clear menu-close ng-click="$state.go('raven.order-list')">
                     <i class="icon ion-compose"></i>
                     Orders
                 </a>
-                <a class="item item-icon-left" nav-clear menu-close ui-sref="transp.order-history-list">
+                <a class="item item-icon-left" nav-clear menu-close ui-sref="raven.order-history-list">
                     <i class="icon ion-bag"></i>
                     Order history
                 </a>

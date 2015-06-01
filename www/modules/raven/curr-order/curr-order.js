@@ -3,37 +3,37 @@
 angular.module('emve')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('transp.curr-order', {
+            .state('raven.curr-order', {
                 url: "/curr-order/:orderId",
                 abstract: true,
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/transp/curr-order/curr-order.html",
-                        controller: "TranspCurrOrderCtrl"
+                        templateUrl: "modules/raven/curr-order/curr-order.html",
+                        controller: "RavenCurrOrderCtrl"
                     }
                 }
             })
-            .state('transp.curr-order.map', {
+            .state('raven.curr-order.map', {
                 url: "/map",
                 views: {
                     'map': {
-                        templateUrl: "modules/transp/curr-order/map.html"
+                        templateUrl: "modules/raven/curr-order/map.html"
                     }
                 }
             })
-            .state('transp.curr-order.details', {
+            .state('raven.curr-order.details', {
                 url: "/details",
                 views: {
                     'details': {
-                        templateUrl: "modules/transp/curr-order/details.html"
+                        templateUrl: "modules/raven/curr-order/details.html"
                     }
                 }
             })
-            .state('transp.curr-order.messages', {
+            .state('raven.curr-order.messages', {
                 url: "/messages",
                 views: {
                     'messages': {
-                        templateUrl: "modules/transp/curr-order/messages.html"
+                        templateUrl: "modules/raven/curr-order/messages.html"
                     }
                 }
             })
@@ -42,16 +42,16 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('TranspCurrOrderCtrl', function ($rootScope, $scope, $state, $stateParams, $ionicPopup, leafletData, leafletBoundsHelpers, TranspOrders, RecentPosition) {
+    .controller('RavenCurrOrderCtrl', function ($rootScope, $scope, $state, $stateParams, $ionicPopup, leafletData, leafletBoundsHelpers, RavenOrders, RecentPosition) {
         var markers = {}, center = {
             lat: 34.1625,
             lng: -118.4659,
             zoom: 11
         };
 
-        // Make default marker show transporters recent position
+        // Make default marker show raven recent position
         // Need when his position isn't changing
-        // thus 'transp_map' event doesn't trigger
+        // thus 'raven_map' event doesn't trigger
         var position = RecentPosition.get();
         if (position) {
             center = {
@@ -77,11 +77,11 @@ angular.module('emve.controllers')
             markers: markers
         });
 
-        TranspOrders.get({orderId: $stateParams.orderId}, function (data) {
+        RavenOrders.get({orderId: $stateParams.orderId}, function (data) {
                 $scope.order = data.order;
 
-                // TODO: incapsulate transporter location detection
-                leafletData.getMap('transp_curr_order_map').then(function (map) {
+                // TODO: incapsulate raven location detection
+                leafletData.getMap('raven_curr_order_map').then(function (map) {
                     console.log('currorder get map');
                     $scope.markers[1] = {
                         lat: $scope.order.lat,
@@ -92,8 +92,8 @@ angular.module('emve.controllers')
                     map.panTo($scope.markers[1], {animate: true, duration: 8});
 
                     console.log('leaflet data');
-                    $scope.offTranspPos = $rootScope.$on('transp_pos', function (event, position) {
-                        console.log('transp_pos');
+                    $scope.offRavenPos = $rootScope.$on('raven_pos', function (event, position) {
+                        console.log('raven_pos');
                         $scope.markers[0] = {
                             lat: position.coords.latitude,
                             lng: position.coords.longitude,
@@ -107,17 +107,17 @@ angular.module('emve.controllers')
                     template: 'You have no current orders'
                 });
 
-                $state.go('transp.order-list');
+                $state.go('raven.order-list');
             }
         );
 
         $scope.$on('$destroy', function () {
             console.log('controller destroyed');
-            leafletData.unresolveMap('transp_curr_order_map');
+            leafletData.unresolveMap('raven_curr_order_map');
 
-            if ($scope.offTranspPos != void 0) {
-                $scope.offTranspPos();
-                $scope.offTranspPos = null;
+            if ($scope.offRavenPos != void 0) {
+                $scope.offRavenPos();
+                $scope.offRavenPos = null;
             }
 
             angular.extend($scope, {

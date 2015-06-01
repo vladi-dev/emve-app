@@ -3,21 +3,21 @@
 angular.module('emve')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('transp.order-history-list', {
+            .state('raven.order-history-list', {
                 url: "/order-history-list",
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/transp/order-history/order-history-list.html",
-                        controller: "TranspOrderHistoryListCtrl"
+                        templateUrl: "modules/raven/order-history/order-history-list.html",
+                        controller: "RavenOrderHistoryListCtrl"
                     }
                 }
             })
-            .state('transp.order-history-details', {
+            .state('raven.order-history-details', {
                 url: "/order-history-details/:orderId",
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/transp/order-history/order-history-details.html",
-                        controller: "TranspOrderHistoryDetailsCtrl"
+                        templateUrl: "modules/raven/order-history/order-history-details.html",
+                        controller: "RavenOrderHistoryDetailsCtrl"
                     }
                 }
             })
@@ -26,11 +26,11 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('TranspOrderHistoryListCtrl', function ($rootScope, $scope, $http, $ionicPopup, TranspOrders) {
-        TranspOrders.get({'view': 'archive'}, function (data) {
+    .controller('RavenOrderHistoryListCtrl', function ($rootScope, $scope, $http, $ionicPopup, RavenOrders) {
+        RavenOrders.get({'view': 'archive'}, function (data) {
             $scope.orders = data.orders;
 
-            $rootScope.$on('transp_order_completed', function (event, data) {
+            $rootScope.$on('raven_order_completed', function (event, data) {
                 $scope.$apply(function () {
                     $scope.orders.push(data.order);
                 });
@@ -46,8 +46,8 @@ angular.module('emve.controllers')
             });
         });
     })
-    .controller('TranspOrderHistoryDetailsCtrl', function ($rootScope, $scope, $http, $ionicPopup, $ionicModal, $state, $stateParams, TranspOrders) {
-        TranspOrders.get({orderId: $stateParams.orderId}, function (data) {
+    .controller('RavenOrderHistoryDetailsCtrl', function ($rootScope, $scope, $http, $ionicPopup, $ionicModal, $state, $stateParams, RavenOrders) {
+        RavenOrders.get({orderId: $stateParams.orderId}, function (data) {
             $scope.order = data.order;
         });
     })

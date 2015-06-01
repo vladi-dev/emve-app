@@ -3,22 +3,22 @@
 angular.module('emve')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('transp', {
-                url: "/transp",
+            .state('raven', {
+                url: "/raven",
                 abstract: true,
-                templateUrl: "modules/transp/app/menu.html",
-                controller: 'TranspAppCtrl'
+                templateUrl: "modules/raven/app/menu.html",
+                controller: 'RavenAppCtrl'
             });
     })
 ;
 
 angular.module('emve.controllers')
-    .controller('TranspAppCtrl', function ($rootScope, $scope, $window, CurrentUser, TranspOrders, WebsocketService, RecentPosition) {
+    .controller('RavenAppCtrl', function ($rootScope, $scope, $window, CurrentUser, RavenOrders, WebsocketService, RecentPosition) {
         CurrentUser.get({}, function (u) {
             $scope.name = u.first_name + ' ' + u.middle_name + ' ' + u.last_name;
         });
 
-        TranspOrders.get({'view': 'accepted'}, function (data) {
+        RavenOrders.get({'view': 'accepted'}, function (data) {
             $scope.curr_order = null;
             if (data['orders'].length > 0) {
                 $scope.curr_order = data['orders'][0];
@@ -35,11 +35,11 @@ angular.module('emve.controllers')
 
         var socket = WebsocketService.getSocket();
 
-        // Watching transporters position
+        // Watching raven position
         // Sending position coords to backend and broadcasting it in all modules
         navigator.geolocation.watchPosition(function (position) {
             // Broadcast to modules with map
-            $rootScope.$broadcast('transp_pos', position);
+            $rootScope.$broadcast('raven_pos', position);
 
             // Save position as recent for use in modules with map
             RecentPosition.set(position);

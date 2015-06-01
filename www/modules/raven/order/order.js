@@ -3,21 +3,21 @@
 angular.module('emve')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('transp.order-list', {
+            .state('raven.order-list', {
                 url: "/order-list",
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/transp/order/order-list.html",
-                        controller: "TranspOrderListCtrl"
+                        templateUrl: "modules/raven/order/order-list.html",
+                        controller: "RavenOrderListCtrl"
                     }
                 }
             })
-            .state('transp.order', {
+            .state('raven.order', {
                 url: "/order/:orderId",
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/transp/order/order.html",
-                        controller: "TranspOrderCtrl"
+                        templateUrl: "modules/raven/order/order.html",
+                        controller: "RavenOrderCtrl"
                     }
                 }
             })
@@ -26,8 +26,8 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('TranspOrderListCtrl', function ($rootScope, $scope, $http, $ionicPopup, TranspOrders) {
-        TranspOrders.get({'view': 'new'}, function (data) {
+    .controller('RavenOrderListCtrl', function ($rootScope, $scope, $http, $ionicPopup, RavenOrders) {
+        RavenOrders.get({'view': 'new'}, function (data) {
             $scope.orders = data.orders;
 
             $rootScope.$on('raven:new_order', function (event, data) {
@@ -58,16 +58,16 @@ angular.module('emve.controllers')
             });
         });
     })
-    .controller('TranspOrderCtrl', function ($rootScope, $scope, $http, $ionicPopup, $state, $stateParams, TranspOrders, RecentPosition, leafletData, $ionicModal) {
+    .controller('RavenOrderCtrl', function ($rootScope, $scope, $http, $ionicPopup, $state, $stateParams, RavenOrders, RecentPosition, leafletData, $ionicModal) {
         var markers = {}, center = {
             lat: 34.1625,
             lng: -118.4659,
             zoom: 11
         };
 
-        // Make default marker show transporters recent position
+        // Make default marker show ravens recent position
         // Need when his position isn't changing
-        // thus 'transp_map' event doesn't trigger
+        // thus 'raven_map' event doesn't trigger
         var position = RecentPosition.get();
         if (position) {
             center = {
@@ -107,7 +107,7 @@ angular.module('emve.controllers')
             markers2: markers
         });
 
-        $ionicModal.fromTemplateUrl('modules/transp/order/order-modal-map.html', {
+        $ionicModal.fromTemplateUrl('modules/raven/order/order-modal-map.html', {
             scope: $scope,
             animation: 'slide-in-up',
             backdropClickToClose: false,
@@ -127,11 +127,11 @@ angular.module('emve.controllers')
             $scope.detailsModal.show();
         });
 
-        TranspOrders.get({orderId: $stateParams.orderId}, function (data) {
+        RavenOrders.get({orderId: $stateParams.orderId}, function (data) {
             $scope.order = data.order;
 
-            // TODO: incapsulate transporter location detection
-            leafletData.getMap('transp_order_map').then(function (map) {
+            // TODO: incapsulate raven location detection
+            leafletData.getMap('raven_order_map').then(function (map) {
                 $scope.markers[1] = {
                     lat: $scope.order.lat,
                     lng: $scope.order.lng,
@@ -145,7 +145,7 @@ angular.module('emve.controllers')
 
                 map.panTo($scope.markers[1], {animate: true, duration: 8});
 
-                $scope.offTranspPos = $scope.$on('transp_pos', function (event, position) {
+                $scope.offRavenPos = $scope.$on('raven_pos', function (event, position) {
                     $scope.markers[0] = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
@@ -162,9 +162,9 @@ angular.module('emve.controllers')
 
 
         $scope.tryAccept = function () {
-            TranspOrders.accept({orderId: $stateParams.orderId}, function (data) {
+            RavenOrders.accept({orderId: $stateParams.orderId}, function (data) {
                 $rootScope.$broadcast('raven:order_accepted', data);
-                $state.go('transp.curr-order.map', {orderId: data.order.id});
+                $state.go('raven.curr-order.map', {orderId: data.order.id});
             }, function (error) {
                 $ionicPopup.alert({
                     title: 'Error accepting order',

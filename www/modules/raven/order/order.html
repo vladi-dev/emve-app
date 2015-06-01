@@ -1,6 +1,6 @@
 <ion-view view-title="Order #{{order.id}}" hide-back-button="true">
     <ion-nav-buttons side="left">
-        <button class="button button-icon icon ion-ios-arrow-left" ui-sref="transp.order-list">
+        <button class="button button-icon icon ion-ios-arrow-left" ui-sref="raven.order-list">
             Back
         </button>
     </ion-nav-buttons>
@@ -8,7 +8,7 @@
     <ion-content>
         <div class="list card">
             <div class="item item-body" style="height:160px; padding:0;">
-                <leaflet data-tap-disabled="true" id="transp_order_map" center="center" markers="markers"
+                <leaflet data-tap-disabled="true" id="raven_order_map" center="center" markers="markers"
                          defaults="defaults" style="height: 100%;" event-broadcast="events"></leaflet>
             </div>
 
