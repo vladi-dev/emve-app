@@ -6,7 +6,7 @@
     </ion-nav-buttons>
 
     <ion-content>
-        <ui-gmap-google-map center='map.center' zoom='map.zoom' control="map.control"></ui-gmap-google-map>
+        <leaflet data-tap-disabled="true" center="center" markers="markers" defaults="defaults"></leaflet>
 
         <div>
             <button class="button button-block button-positive" type="button" ng-click="tryAddAddress()">Next</button>

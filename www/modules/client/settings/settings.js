@@ -140,48 +140,74 @@ angular.module('emve.controllers')
     })
     .controller('SettingsAddAddressCtrl', function ($scope, $http, $ionicPopup, $state, UsersAddresses, NewAddress) {
         $scope.newAddressData = NewAddress.get();
+        console.log($scope.newAddressData);
 
         $scope.saveAddress = function () {
             NewAddress.set($scope.newAddressData);
             $state.go('client.settings-add-address-map')
         }
     })
-    .controller('SettingsAddAddressMapCtrl', function ($scope, $http, $ionicPopup, $state, UsersAddresses, NewAddress, uiGmapIsReady, flash) {
+    .controller('SettingsAddAddressMapCtrl', function ($rootScope, $scope, $http, $ionicPopup, $state, UsersAddresses, NewAddress, leafletData, flash) {
+        $rootScope.$broadcast('loading:show');
         $scope.newAddressData = NewAddress.get();
 
-        $scope.map = {
-            center: {latitude: 33.87, longitude: -117.79},
-            control: "",
-            zoom: 17
-        };
+        angular.extend($scope, {
+            center: {
+                lat: 34.1625,
+                lng: -118.4659,
+                zoom: 11
+            },
+            defaults: {
+                tileLayer: "https://{s}.tiles.mapbox.com/v4/emve-dev.l8pjd86f/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZW12ZS1kZXYiLCJhIjoiNWo4dEVUWSJ9._AFAtSxwrUNknqpVkzdYZw",
+                tileLayerOptions: {
+                    attribution: 'MapBox'
+                }
+            },
+            markers: {}
+        });
 
         if ($scope.newAddressData) {
             var a = NewAddress.get();
 
-            uiGmapIsReady.promise(1).then(function (instances) {
-                var map = instances[0].map;
+            leafletData.getMap().then(function (map) {
                 var address = a.house + " " + a.street + " " + a.city + " " + a.state + " " + a.zip;
 
                 if (address) {
-                    var geocoder = new google.maps.Geocoder();
-                    geocoder.geocode({'address': address}, function (results, status) {
-                        if (status == google.maps.GeocoderStatus.OK) {
-                            var marker = new google.maps.Marker({
-                                map: map,
-                                draggable: true,
-                                position: results[0].geometry.location
+                    var geocodeUrl = encodeURI('https://api.tiles.mapbox.com/v4/geocode/mapbox.places/' + address + '.json?access_token=pk.eyJ1IjoiZW12ZS1kZXYiLCJhIjoiNWo4dEVUWSJ9._AFAtSxwrUNknqpVkzdYZw');
+
+                    var xmlHttp = new XMLHttpRequest();
+                    xmlHttp.open("GET", geocodeUrl, true);
+                    xmlHttp.send(null);
+                    xmlHttp.onreadystatechange = function () {
+                        if (xmlHttp.readyState === 4) {
+                            if (xmlHttp.status != 200 && req.status != 304) return;
+                            var response = JSON.parse(xmlHttp.response);
+                            var position = response.features[0].geometry;
+
+                            $scope.newAddressData.lat = position.coordinates[1];
+                            $scope.newAddressData.lng = position.coordinates[0];
+
+                            $scope.markers[0] = {
+                                lat: $scope.newAddressData.lat,
+                                lng: $scope.newAddressData.lng,
+                                message: address,
+                                draggable: true
+                            };
+
+                            $scope.center = {
+                                lat: $scope.markers[0].lat,
+                                lng: $scope.markers[0].lng,
+                                zoom: 11
+                            };
+
+                            $scope.$on('leafletDirectiveMarker.dragend', function (e, args) {
+                                $scope.newAddressData.lat = args.model.lat;
+                                $scope.newAddressData.lng = args.model.lng;
                             });
-
-                            google.maps.event.addListener(marker, 'dragend', function() {
-                                $scope.newAddressData.lat = marker.getPosition().lat();
-                                $scope.newAddressData.lng = marker.getPosition().lng();
-                            });
-
-                            google.maps.event.trigger(marker, 'dragend');
-
-                            map.setCenter(marker.getPosition());
                         }
-                    });
+
+                        $rootScope.$broadcast('loading:hide');
+                    };
                 }
             });
 
@@ -189,7 +215,7 @@ angular.module('emve.controllers')
 
         $scope.tryAddAddress = function () {
             UsersAddresses.put($scope.newAddressData, function () {
-                $scope.newAddressData = {};
+                NewAddress.set({});
                 flash('Address added');
                 $state.go('client.settings-address')
             }, function (data, status, headers, config) {
