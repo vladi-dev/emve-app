@@ -3,21 +3,21 @@
 angular.module('emve')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('raven.order-list', {
+            .state('maven.order-list', {
                 url: "/order-list",
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/raven/order/order-list.html",
-                        controller: "RavenOrderListCtrl"
+                        templateUrl: "modules/maven/order/order-list.html",
+                        controller: "MavenOrderListCtrl"
                     }
                 }
             })
-            .state('raven.order', {
+            .state('maven.order', {
                 url: "/order/:orderId",
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/raven/order/order.html",
-                        controller: "RavenOrderCtrl"
+                        templateUrl: "modules/maven/order/order.html",
+                        controller: "MavenOrderCtrl"
                     }
                 }
             })
@@ -26,18 +26,18 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('RavenOrderListCtrl', function ($rootScope, $scope, $http, $ionicPopup, RavenOrders) {
-        RavenOrders.get({'view': 'new'}, function (data) {
+    .controller('MavenOrderListCtrl', function ($rootScope, $scope, $http, $ionicPopup, MavenOrders) {
+        MavenOrders.get({'view': 'new'}, function (data) {
             $scope.orders = data.orders;
 
-            $rootScope.$on('raven:new_order', function (event, data) {
+            $rootScope.$on('maven:new_order', function (event, data) {
                 $scope.$apply(function () {
                     $scope.orders.push(data.order);
                 });
             });
 
-            $rootScope.$on('raven:order_remove', function (event, data) {
-                console.log('raven:order_remove');
+            $rootScope.$on('maven:order_remove', function (event, data) {
+                console.log('maven:order_remove');
                 angular.forEach($scope.orders, function (order, idx) {
 
                     if (order.id == data.order_id) {
@@ -58,16 +58,16 @@ angular.module('emve.controllers')
             });
         });
     })
-    .controller('RavenOrderCtrl', function ($rootScope, $scope, $http, $ionicPopup, $state, $stateParams, RavenOrders, RecentPosition, leafletData, $ionicModal) {
+    .controller('MavenOrderCtrl', function ($rootScope, $scope, $http, $ionicPopup, $state, $stateParams, MavenOrders, RecentPosition, leafletData, $ionicModal) {
         var markers = {}, center = {
             lat: 34.1625,
             lng: -118.4659,
             zoom: 11
         };
 
-        // Make default marker show ravens recent position
+        // Make default marker show mavens recent position
         // Need when his position isn't changing
-        // thus 'raven_map' event doesn't trigger
+        // thus 'maven_map' event doesn't trigger
         var position = RecentPosition.get();
         if (position) {
             center = {
@@ -107,7 +107,7 @@ angular.module('emve.controllers')
             markers2: markers
         });
 
-        $ionicModal.fromTemplateUrl('modules/raven/order/order-modal-map.html', {
+        $ionicModal.fromTemplateUrl('modules/maven/order/order-modal-map.html', {
             scope: $scope,
             animation: 'slide-in-up',
             backdropClickToClose: false,
@@ -127,11 +127,11 @@ angular.module('emve.controllers')
             $scope.detailsModal.show();
         });
 
-        RavenOrders.get({orderId: $stateParams.orderId}, function (data) {
+        MavenOrders.get({orderId: $stateParams.orderId}, function (data) {
             $scope.order = data.order;
 
-            // TODO: incapsulate raven location detection
-            leafletData.getMap('raven_order_map').then(function (map) {
+            // TODO: incapsulate maven location detection
+            leafletData.getMap('maven_order_map').then(function (map) {
                 $scope.markers[1] = {
                     lat: $scope.order.lat,
                     lng: $scope.order.lng,
@@ -145,7 +145,7 @@ angular.module('emve.controllers')
 
                 map.panTo($scope.markers[1], {animate: true, duration: 8});
 
-                $scope.offRavenPos = $scope.$on('raven_pos', function (event, position) {
+                $scope.offMavenPos = $scope.$on('maven_pos', function (event, position) {
                     $scope.markers[0] = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
@@ -162,9 +162,9 @@ angular.module('emve.controllers')
 
 
         $scope.tryAccept = function () {
-            RavenOrders.accept({orderId: $stateParams.orderId}, function (data) {
-                $rootScope.$broadcast('raven:order_accepted', data);
-                $state.go('raven.curr-order.map', {orderId: data.order.id});
+            MavenOrders.accept({orderId: $stateParams.orderId}, function (data) {
+                $rootScope.$broadcast('maven:order_accepted', data);
+                $state.go('maven.curr-order.map', {orderId: data.order.id});
             }, function (error) {
                 $ionicPopup.alert({
                     title: 'Error accepting order',

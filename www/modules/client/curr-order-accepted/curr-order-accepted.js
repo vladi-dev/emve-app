@@ -92,7 +92,7 @@ angular.module('emve.controllers')
                 $scope.markers[1] = {
                     lat: data.pos.latitude,
                     lng: data.pos.longitude,
-                    message: 'Raven'
+                    message: 'Maven'
                 };
 
                 if (!centered) {

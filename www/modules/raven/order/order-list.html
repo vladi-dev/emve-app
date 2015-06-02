@@ -8,7 +8,7 @@
             <label class="item item-input" ng-hide="orders.length">
                 No orders.
             </label>
-            <ion-item class="item item-icon-right" ng-repeat="o in orders" type="list-inset" ui-sref="raven.order({orderId: o.id})">
+            <ion-item class="item item-icon-right" ng-repeat="o in orders" type="list-inset" ui-sref="maven.order({orderId: o.id})">
                 <i class="icon ion-chevron-right"></i>
                 <h2>#{{o.id}}</h2>
                 <p>Order: {{o.order}}</p>

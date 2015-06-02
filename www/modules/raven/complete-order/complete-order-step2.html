@@ -1,6 +1,6 @@
 <ion-view view-title="Order Summary" hide-back-button="true">
     <ion-nav-buttons side="left">
-        <button class="button button-icon icon ion-ios-arrow-left" ui-sref="raven.complete-order-step1({orderId: order.id})">
+        <button class="button button-icon icon ion-ios-arrow-left" ui-sref="maven.complete-order-step1({orderId: order.id})">
             Back
         </button>
     </ion-nav-buttons>
@@ -10,7 +10,7 @@
         <p>Total purchases from recepts: ${{ fees.amount }}</p>
         <p>20% Total fee: ${{ fees.total_fee }}</p>
         <p>Total amount: ${{ fees.total_amount }}</p>
-        <p>Raven fee: ${{ fees.raven_fee }}</p>
+        <p>Maven fee: ${{ fees.maven_fee }}</p>
         <p>Service fee: ${{ fees.service_fee }}</p>
 
         <form name="completeOrderForm" ng-submit="tryCompleteOrder()" novalidate="">

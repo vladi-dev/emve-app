@@ -3,30 +3,30 @@
 angular.module('emve')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('raven.complete-order-step1', {
+            .state('maven.complete-order-step1', {
                 url: "/complete-order-step1/:orderId",
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/raven/complete-order/complete-order-step1.html",
-                        controller: "RavenCompleteOrderStep1Ctrl"
+                        templateUrl: "modules/maven/complete-order/complete-order-step1.html",
+                        controller: "MavenCompleteOrderStep1Ctrl"
                     }
                 }
             })
-            .state('raven.complete-order-step2', {
+            .state('maven.complete-order-step2', {
                 url: "/complete-order-step2/:orderId/:amount",
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/raven/complete-order/complete-order-step2.html",
-                        controller: "RavenCompleteOrderStep2Ctrl"
+                        templateUrl: "modules/maven/complete-order/complete-order-step2.html",
+                        controller: "MavenCompleteOrderStep2Ctrl"
                     }
                 }
             })
-            .state('raven.complete-order-step3', {
+            .state('maven.complete-order-step3', {
                 url: "/complete-order-step3/:orderId",
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/raven/complete-order/complete-order-step3.html",
-                        controller: "RavenCompleteOrderStep3Ctrl"
+                        templateUrl: "modules/maven/complete-order/complete-order-step3.html",
+                        controller: "MavenCompleteOrderStep3Ctrl"
                     }
                 }
             })
@@ -35,23 +35,23 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('RavenCompleteOrderStep1Ctrl', function ($rootScope, $scope, $state, $stateParams, RavenOrders) {
+    .controller('MavenCompleteOrderStep1Ctrl', function ($rootScope, $scope, $state, $stateParams, MavenOrders) {
         $scope.processAmountData = {};
 
-        RavenOrders.get({orderId: $stateParams.orderId}, function (data) {
+        MavenOrders.get({orderId: $stateParams.orderId}, function (data) {
             $scope.order = data.order;
 
             $scope.tryProcessAmount = function () {
-                $state.go('raven.complete-order-step2', {orderId: $scope.order.id, amount: $scope.processAmountData.amount});
+                $state.go('maven.complete-order-step2', {orderId: $scope.order.id, amount: $scope.processAmountData.amount});
             }
         });
     })
-    .controller('RavenCompleteOrderStep2Ctrl', function ($rootScope, $scope, $state, $stateParams, $ionicPopup, RavenOrders) {
+    .controller('MavenCompleteOrderStep2Ctrl', function ($rootScope, $scope, $state, $stateParams, $ionicPopup, MavenOrders) {
         $scope.fees = {};
         $scope.completeOrderData = {};
 
         console.log('before get');
-        RavenOrders.get({'orderId': $stateParams.orderId, 'amount': $stateParams.amount}, function (data) {
+        MavenOrders.get({'orderId': $stateParams.orderId, 'amount': $stateParams.amount}, function (data) {
             console.log('in get');
             $scope.order = data.order;
             $scope.fees = data.fees;
@@ -59,11 +59,11 @@ angular.module('emve.controllers')
         console.log('after get');
 
         $scope.tryCompleteOrder = function () {
-            RavenOrders.complete({'orderId': $scope.order.id, 'amount': $scope.fees.amount, 'pin': $scope.completeOrderData.pin, 'act': 'complete'}, function (data) {
+            MavenOrders.complete({'orderId': $scope.order.id, 'amount': $scope.fees.amount, 'pin': $scope.completeOrderData.pin, 'act': 'complete'}, function (data) {
                 if (data.success) {
                     console.log($scope.order);
-                    $rootScope.$broadcast('raven:order_completed');
-                    $state.go('raven.complete-order-step3', {orderId: $scope.order.id});
+                    $rootScope.$broadcast('maven:order_completed');
+                    $state.go('maven.complete-order-step3', {orderId: $scope.order.id});
                 }
             }, function (error) {
                 $ionicPopup.alert({
@@ -77,7 +77,7 @@ angular.module('emve.controllers')
             });
         }
     })
-    .controller('RavenCompleteOrderStep3Ctrl', function ($rootScope, $scope, $state, $stateParams) {
+    .controller('MavenCompleteOrderStep3Ctrl', function ($rootScope, $scope, $state, $stateParams) {
         $scope.orderId = $stateParams.orderId;
     })
 ;

@@ -3,21 +3,21 @@
 angular.module('emve')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('raven.order-history-list', {
+            .state('maven.order-history-list', {
                 url: "/order-history-list",
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/raven/order-history/order-history-list.html",
-                        controller: "RavenOrderHistoryListCtrl"
+                        templateUrl: "modules/maven/order-history/order-history-list.html",
+                        controller: "MavenOrderHistoryListCtrl"
                     }
                 }
             })
-            .state('raven.order-history-details', {
+            .state('maven.order-history-details', {
                 url: "/order-history-details/:orderId",
                 views: {
                     'menuContent': {
-                        templateUrl: "modules/raven/order-history/order-history-details.html",
-                        controller: "RavenOrderHistoryDetailsCtrl"
+                        templateUrl: "modules/maven/order-history/order-history-details.html",
+                        controller: "MavenOrderHistoryDetailsCtrl"
                     }
                 }
             })
@@ -26,11 +26,11 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('RavenOrderHistoryListCtrl', function ($rootScope, $scope, $http, $ionicPopup, RavenOrders) {
-        RavenOrders.get({'view': 'archive'}, function (data) {
+    .controller('MavenOrderHistoryListCtrl', function ($rootScope, $scope, $http, $ionicPopup, MavenOrders) {
+        MavenOrders.get({'view': 'archive'}, function (data) {
             $scope.orders = data.orders;
 
-            $rootScope.$on('raven_order_completed', function (event, data) {
+            $rootScope.$on('maven_order_completed', function (event, data) {
                 $scope.$apply(function () {
                     $scope.orders.push(data.order);
                 });
@@ -46,8 +46,8 @@ angular.module('emve.controllers')
             });
         });
     })
-    .controller('RavenOrderHistoryDetailsCtrl', function ($rootScope, $scope, $http, $ionicPopup, $ionicModal, $state, $stateParams, RavenOrders) {
-        RavenOrders.get({orderId: $stateParams.orderId}, function (data) {
+    .controller('MavenOrderHistoryDetailsCtrl', function ($rootScope, $scope, $http, $ionicPopup, $ionicModal, $state, $stateParams, MavenOrders) {
+        MavenOrders.get({orderId: $stateParams.orderId}, function (data) {
             $scope.order = data.order;
         });
     })

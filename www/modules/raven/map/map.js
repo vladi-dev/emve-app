@@ -2,12 +2,12 @@
 
 angular.module('emve')
     .config(function ($stateProvider) {
-        $stateProvider.state('raven.map', {
+        $stateProvider.state('maven.map', {
             url: "/map",
             views: {
                 'menuContent': {
-                    templateUrl: "modules/raven/map/map.html",
-                    controller: "RavenMapCtrl"
+                    templateUrl: "modules/maven/map/map.html",
+                    controller: "MavenMapCtrl"
                 }
             }
         });
@@ -15,10 +15,10 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('RavenMapCtrl', function ($rootScope, $scope, $ionicPopup, leafletData, RecentPosition) {
-        // Make default marker show ravens recent position
+    .controller('MavenMapCtrl', function ($rootScope, $scope, $ionicPopup, leafletData, RecentPosition) {
+        // Make default marker show mavens recent position
         // Need when his position isn't changing
-        // thus 'raven_map' event doesn't trigger
+        // thus 'maven_map' event doesn't trigger
         var markers = {}, center = {};
         var position = RecentPosition.get();
         if (position) {
@@ -48,13 +48,13 @@ angular.module('emve.controllers')
 
 
         // When map is loaded
-        // Listen to 'raven_map' event (raven/app module)
-        // to show current ravenorter position
+        // Listen to 'maven_map' event (maven/app module)
+        // to show current mavenorter position
         // and center map once
         var centered = false;
-        leafletData.getMap('raven_map').then(function (map) {
+        leafletData.getMap('maven_map').then(function (map) {
             console.log('map get map');
-            $scope.offRavenPos = $rootScope.$on('raven_pos', function (event, position) {
+            $scope.offMavenPos = $rootScope.$on('maven_pos', function (event, position) {
                 $scope.markers[0] = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
@@ -73,11 +73,11 @@ angular.module('emve.controllers')
         });
 
         $scope.$on('$destroy', function () {
-            leafletData.unresolveMap('raven_map');
+            leafletData.unresolveMap('maven_map');
 
-            if (typeof $scope.offRavenPos === 'function') {
-                $scope.offRavenPos();
-                $scope.offRavenPos = null;
+            if (typeof $scope.offMavenPos === 'function') {
+                $scope.offMavenPos();
+                $scope.offMavenPos = null;
             }
 
             angular.extend($scope, {

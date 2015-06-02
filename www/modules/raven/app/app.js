@@ -3,50 +3,50 @@
 angular.module('emve')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('raven', {
-                url: "/raven",
+            .state('maven', {
+                url: "/maven",
                 abstract: true,
-                templateUrl: "modules/raven/app/menu.html",
-                controller: 'RavenAppCtrl'
+                templateUrl: "modules/maven/app/menu.html",
+                controller: 'MavenAppCtrl'
             });
     })
 ;
 
 angular.module('emve.controllers')
-    .controller('RavenAppCtrl', function ($rootScope, $scope, $window, CurrentUser, RavenOrders, WebsocketService, RecentPosition) {
+    .controller('MavenAppCtrl', function ($rootScope, $scope, $window, CurrentUser, MavenOrders, WebsocketService, RecentPosition) {
         CurrentUser.get({}, function (u) {
             $scope.name = u.first_name + ' ' + u.middle_name + ' ' + u.last_name;
         });
 
-        RavenOrders.get({'view': 'accepted'}, function (data) {
+        MavenOrders.get({'view': 'accepted'}, function (data) {
             $scope.curr_order = null;
             if (data['orders'].length > 0) {
                 $scope.curr_order = data['orders'][0];
             }
         });
 
-        $rootScope.$on('raven:order_accepted', function (event, data) {
+        $rootScope.$on('maven:order_accepted', function (event, data) {
             $scope.curr_order = data.order;
         });
 
-        $rootScope.$on('raven:order_completed', function (event, data) {
+        $rootScope.$on('maven:order_completed', function (event, data) {
             $scope.curr_order = null;
         });
 
         var socket = WebsocketService.getSocket();
 
-        // Watching raven position
+        // Watching maven position
         // Sending position coords to backend and broadcasting it in all modules
         navigator.geolocation.watchPosition(function (position) {
             // Broadcast to modules with map
-            $rootScope.$broadcast('raven_pos', position);
+            $rootScope.$broadcast('maven_pos', position);
 
             // Save position as recent for use in modules with map
             RecentPosition.set(position);
 
             // TODO: maybe change structure of pos, for easy marker creation on map
             var msg = {
-                'event': 'raven:coords_sent',
+                'event': 'maven:coords_sent',
                 'pos': {'latitude': position.coords.latitude, 'longitude': position.coords.longitude}
             };
 
