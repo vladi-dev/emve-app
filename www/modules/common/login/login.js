@@ -25,7 +25,11 @@ angular.module('emve.controllers')
 
                         $rootScope.$emit('websocket:start');
 
-                        $state.go('client.custom-order');
+                        if (data.is_maven) {
+                            $state.go('maven.map');
+                        } else {
+                            $state.go('client.custom-order');
+                        }
                     });
                 })
                 .error(function (data, status, headers, config) {
