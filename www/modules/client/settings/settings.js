@@ -67,18 +67,18 @@ angular.module('emve.controllers')
             $state.go('splash');
         }
     })
-    .controller('SettingsNameCtrl', function ($scope, $http, $ionicPopup, CurrentUser, flash) {
+    .controller('SettingsNameCtrl', function ($scope, $http, $ionicPopup, UserAPI, flash) {
         $scope.showFeedback = false;
         $scope.userData = {};
 
-        CurrentUser.get({}, function (u) {
+        UserAPI.get({}, function (u) {
             $scope.userData.first_name = u.first_name;
             $scope.userData.middle_name = u.middle_name;
             $scope.userData.last_name = u.last_name;
         });
 
         $scope.tryUpdateName = function () {
-            CurrentUser.patch($scope.userData, function (data) {
+            UserAPI.patch($scope.userData, function (data) {
                 flash('Name changed');
             }, function (data, status, headers, config) {
                 $ionicPopup.alert({
@@ -92,15 +92,15 @@ angular.module('emve.controllers')
             });
         }
     })
-    .controller('SettingsPhoneCtrl', function ($scope, $http, $ionicPopup, CurrentUser, flash) {
+    .controller('SettingsPhoneCtrl', function ($scope, $http, $ionicPopup, UserAPI, flash) {
         $scope.userData = {};
 
-        var user = CurrentUser.get({}, function (u) {
+        var user = UserAPI.get({}, function (u) {
             $scope.userData.phone = u.phone;
         });
 
         $scope.tryUpdatePhone = function () {
-            CurrentUser.patch($scope.userData, function (data) {
+            UserAPI.patch($scope.userData, function (data) {
                 flash('Phone changed');
             }, function (data, status, headers, config) {
                 $ionicPopup.alert({

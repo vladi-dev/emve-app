@@ -13,10 +13,9 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('MavenAppCtrl', function ($rootScope, $scope, $window, CurrentUser, MavenOrders, WebsocketService, RecentPosition) {
-        CurrentUser.get({}, function (u) {
-            $scope.name = u.first_name + ' ' + u.middle_name + ' ' + u.last_name;
-        });
+    .controller('MavenAppCtrl', function ($rootScope, $scope, CurrentUser, MavenOrders, WebsocketService, RecentPosition) {
+        var u = CurrentUser.get();
+        $scope.name = u.first_name + ' ' + u.middle_name + ' ' + u.last_name;
 
         MavenOrders.get({'view': 'accepted'}, function (data) {
             $scope.curr_order = null;

@@ -11,19 +11,22 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('LoginCtrl', function ($rootScope, $scope, $http, $window, $state, $ionicPopup, WebsocketService, API_URL) {
+    .controller('LoginCtrl', function ($rootScope, $scope, $http, $localstorage, $state, $ionicPopup, WebsocketService, API_URL, UserAPI, CurrentUser) {
         $scope.loginData = {};
 
-        $scope.token = $window.sessionStorage.token;
         $scope.tryLogin = function () {
             $http.post(API_URL + '/login', $scope.loginData)
                 .success(function (data, status, headers, config) {
-                    $window.sessionStorage.token = data.token;
+                    $localstorage.set('token', data.token);
 
-                    $rootScope.$emit('websocket:start');
 
-                    $state.go('client.custom-order');
+                    UserAPI.get({}, function (data) {
+                        CurrentUser.set(data);
 
+                        $rootScope.$emit('websocket:start');
+
+                        $state.go('client.custom-order');
+                    });
                 })
                 .error(function (data, status, headers, config) {
                     $ionicPopup.alert({
@@ -34,7 +37,8 @@ angular.module('emve.controllers')
                             type: 'button-clear'
                         }]
                     });
-                    delete $window.sessionStorage.token;
+                    //delete $window.sessionStorage.token;
+                    $localstorage.set('token', null);
                 });
         }
     })

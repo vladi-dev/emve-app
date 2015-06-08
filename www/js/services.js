@@ -1,14 +1,31 @@
 'use strict';
 
 angular.module('emve.services', ['ngResource'])
-    .factory('authInterceptor', function ($rootScope, $q, $window) {
+    .factory('$localstorage', ['$window', function($window) {
+        return {
+            set: function(key, value) {
+                $window.localStorage[key] = value;
+            },
+            get: function(key, defaultValue) {
+                return $window.localStorage[key] || defaultValue;
+            },
+            setObject: function(key, value) {
+                $window.localStorage[key] = JSON.stringify(value);
+            },
+            getObject: function(key) {
+                return JSON.parse($window.localStorage[key] || '{}');
+            }
+        }
+    }])
+    .factory('authInterceptor', function ($rootScope, $q, $window, $localstorage) {
         return {
             request: function (config) {
                 $rootScope.$broadcast('loading:show');
 
                 config.headers = config.headers || {};
-                if ($window.sessionStorage.token) {
-                    config.headers.Authorization = 'JWT ' + $window.sessionStorage.token;
+                var token = $localstorage.get('token');
+                if (token) {
+                    config.headers.Authorization = 'JWT ' + token;
                 }
                 return config;
             },
@@ -28,7 +45,17 @@ angular.module('emve.services', ['ngResource'])
             }
         };
     })
-    .factory('CurrentUser', function ($resource, API_URL) {
+    .factory('CurrentUser', function ($localstorage) {
+        return {
+            get: function () {
+                return $localstorage.getObject('current_user');
+            },
+            set: function (currentUser) {
+                return $localstorage.setObject('current_user', currentUser);
+            }
+        }
+    })
+    .factory('UserAPI', function ($resource, API_URL) {
         return $resource(API_URL + '/users', {}, {
             patch: {
                 method: 'PATCH'
@@ -76,16 +103,16 @@ angular.module('emve.services', ['ngResource'])
             }
         }
     })
-    .factory('WebsocketService', function ($window, $ionicPopup, $rootScope, $state, WEBSOCKET_URL) {
+    .factory('WebsocketService', function ($localstorage, $ionicPopup, $rootScope, $state, WEBSOCKET_URL) {
         var socket = null;
 
         return {
             start: function () {
-                if (socket || $window.sessionStorage.token == void 0) {
+                var token = $localstorage.get('token');
+                if (socket || token == void 0) {
                     return;
                 }
 
-                var token = $window.sessionStorage.token;
                 var wsUri = WEBSOCKET_URL + '?token=' + token;
                 socket = new ReconnectingWebSocket(wsUri);
 
