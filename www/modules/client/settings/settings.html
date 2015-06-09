@@ -41,8 +41,9 @@
                 Logout
             </a>
 
-            <div class="item item-divider">Mavens Only</div>
-            <a class="item item-icon-left" nav-clear menu-close ui-sref="maven.map">
+
+            <div class="item item-divider" ng-show="user.is_maven">Mavens Only</div>
+            <a class="item item-icon-left" ng-show="user.is_maven" nav-clear menu-close ui-sref="maven.map">
                 <i class="icon ion-model-s dark"></i>
                 Switch to maven app
             </a>

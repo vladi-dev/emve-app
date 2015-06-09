@@ -59,7 +59,8 @@ angular.module('emve')
     });
 
 angular.module('emve.controllers')
-    .controller('SettingsCtrl', function ($rootScope, $scope, $window, $state) {
+    .controller('SettingsCtrl', function ($rootScope, $scope, $window, $state, CurrentUser) {
+        $scope.user = CurrentUser.get();
         $scope.doLogout = function () {
             $rootScope.$emit('websocket:close');
 
