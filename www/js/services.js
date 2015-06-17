@@ -24,7 +24,7 @@ angular.module('emve.services', ['ngResource'])
 
                 config.headers = config.headers || {};
                 var token = $localstorage.get('token');
-                if (token) {
+                if (token !== 'null' || token !== 'undefined') {
                     config.headers.Authorization = 'JWT ' + token;
                 }
                 return config;
@@ -109,12 +109,13 @@ angular.module('emve.services', ['ngResource'])
         return {
             start: function () {
                 var token = $localstorage.get('token');
-                if (socket || token == void 0) {
+                if (socket || token === "null" || token === "undefined") {
                     return;
                 }
 
                 var wsUri = WEBSOCKET_URL + '?token=' + token;
                 socket = new ReconnectingWebSocket(wsUri);
+                console.log(wsUri);
 
                 socket.onopen = function () {
                     console.log('connected');
@@ -176,5 +177,12 @@ angular.module('emve.services', ['ngResource'])
                 return _pos;
             }
         }
+    })
+    .factory('PaymentAPI', function ($resource, API_URL) {
+        return $resource(API_URL + '/payment', {}, {
+            post: {
+                method: 'POST'
+            }
+        });
     })
 ;

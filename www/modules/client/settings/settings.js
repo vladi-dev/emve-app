@@ -55,16 +55,27 @@ angular.module('emve')
                         controller: "SettingsAddAddressMapCtrl"
                     }
                 }
+            })
+            .state('client.settings-payment', {
+                url: "/settings/payment",
+                views: {
+                    'menuContent': {
+                        templateUrl: "modules/client/settings/payment.html",
+                        controller: "SettingsPaymentCtrl"
+                    }
+                }
             });
     });
 
 angular.module('emve.controllers')
-    .controller('SettingsCtrl', function ($rootScope, $scope, $window, $state, CurrentUser) {
+    .controller('SettingsCtrl', function ($rootScope, $scope, $window, $state, $localstorage, CurrentUser) {
         $scope.user = CurrentUser.get();
         $scope.doLogout = function () {
+            $localstorage.set('token', null);
+
             $rootScope.$emit('websocket:close');
 
-            delete $window.sessionStorage.token;
+
             $state.go('splash');
         }
     })
@@ -228,6 +239,24 @@ angular.module('emve.controllers')
                         type: 'button-clear'
                     }]
                 });
+            });
+        }
+    })
+    .controller('SettingsPaymentCtrl', function ($scope, PaymentAPI) {
+        $scope.paymentData = {};
+
+        PaymentAPI.get({}, function (data) {
+            braintree.setup(data.token, "dropin", {
+                container: "payment-form",
+                onPaymentMethodReceived: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+
+        $scope.connectPayment = function () {
+            PaymentAPI.post($scope.paymentData, function (data) {
+                console.log(data);
             });
         }
     })

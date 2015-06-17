@@ -35,7 +35,7 @@ angular.module('emve.controllers')
                 .error(function (data, status, headers, config) {
                     $ionicPopup.alert({
                         title: 'Error logging in',
-                        template: 'Check your username and password',
+                        template: data.error,
                         buttons: [{
                             text: 'OK',
                             type: 'button-clear'
