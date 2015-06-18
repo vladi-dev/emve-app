@@ -246,18 +246,25 @@ angular.module('emve.controllers')
         $scope.paymentData = {};
 
         PaymentAPI.get({}, function (data) {
-            braintree.setup(data.token, "dropin", {
-                container: "payment-form",
-                onPaymentMethodReceived: function (data) {
-                    console.log(data);
-                }
-            });
-        });
+            var client = new braintree.api.Client({clientToken: data.token});
+            console.log(client);
 
-        $scope.connectPayment = function () {
-            PaymentAPI.post($scope.paymentData, function (data) {
-                console.log(data);
-            });
-        }
+            $scope.connectPayment = function () {
+                console.log('connect payment');
+                console.log($scope.paymentData);
+                client.tokenizeCard({
+                    number: $scope.paymentData.number,
+                    expirationDate: $scope.paymentData.expiration_date
+                }, function (err, nonce) {
+                    // Send nonce to your server
+                    console.log(err);
+                    console.log(nonce);
+
+                    PaymentAPI.post({'nonce': nonce}, function (data) {
+                        console.log(data);
+                    })
+                });
+            }
+        });
     })
 ;

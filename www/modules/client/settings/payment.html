@@ -6,10 +6,19 @@
     </ion-nav-buttons>
 
     <ion-content>
-        <form id="checkout" novalidate="">
-            <div id="payment-form"></div>
-            <div>
-                <button class="button button-block button-positive" type="submit">Connect</button>
+        <form id="braintree_connect" ng-submit="connectPayment()">
+            <div class="list">
+                <label class="item item-input">
+                    <input type="text" ngmodel="paymentData.number" placeholder="Card Number">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" data-braintree-name="paymentData.expiration_date" placeholder="Expiration Date">
+                </label>
+
+                <div>
+                    <button class="button button-block button-positive" type="submit">Connect</button>
+                </div>
             </div>
         </form>
     </ion-content>

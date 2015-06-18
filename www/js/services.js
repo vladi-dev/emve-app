@@ -109,7 +109,7 @@ angular.module('emve.services', ['ngResource'])
         return {
             start: function () {
                 var token = $localstorage.get('token');
-                if (socket || token === "null" || token === "undefined") {
+                if (socket || token === "null" || token === "undefined" || token === void 0) {
                     return;
                 }
 
