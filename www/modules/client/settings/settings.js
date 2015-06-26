@@ -242,29 +242,77 @@ angular.module('emve.controllers')
             });
         }
     })
-    .controller('SettingsPaymentCtrl', function ($scope, PaymentAPI) {
-        $scope.paymentData = {};
+    .controller('SettingsPaymentCtrl', function ($scope, $ionicPopup, PaymentAPI, $state) {
 
-        PaymentAPI.get({}, function (data) {
-            var client = new braintree.api.Client({clientToken: data.token});
-            console.log(client);
+        var initController = function () {
+            PaymentAPI.get({}, function (data) {
+                if (data.payment_method !== void 0) {
+                    $scope.paymentExists = true;
+                    $scope.paymentMethod = data.payment_method;
 
-            $scope.connectPayment = function () {
-                console.log('connect payment');
-                console.log($scope.paymentData);
-                client.tokenizeCard({
-                    number: $scope.paymentData.number,
-                    expirationDate: $scope.paymentData.expiration_date
-                }, function (err, nonce) {
-                    // Send nonce to your server
-                    console.log(err);
-                    console.log(nonce);
+                    $scope.tryDeletePayment = function () {
+                        PaymentAPI.delete({}, function (data) {
+                            initController();
+                        }, function (response) {
+                            $ionicPopup.alert({
+                                title: 'Error',
+                                template: response.data.errors.join("\n"),
+                                buttons: [{
+                                    text: 'OK',
+                                    type: 'button-clear'
+                                }]
+                            });
+                        });
+                    }
+                } else {
+                    $scope.paymentExists = false;
+                    $scope.paymentData = {};
 
-                    PaymentAPI.post({'nonce': nonce}, function (data) {
-                        console.log(data);
-                    })
-                });
-            }
-        });
+                    // Get client token from backend
+                    PaymentAPI.get({'act': 'get_token'}, function (data) {
+                        var client = new braintree.api.Client({clientToken: data.token});
+
+                        $scope.connectPayment = function () {
+
+                            client.tokenizeCard({
+                                number: $scope.paymentData.number,
+                                cardholderName: $scope.paymentData.cardholderName,
+                                expirationDate: $scope.paymentData.expirationDate,
+                                cvv: $scope.paymentData.cvv,
+                                billingAddress: {
+                                    firstName: $scope.paymentData.billingAddress.firstName,
+                                    lastName: $scope.paymentData.billingAddress.lastName,
+                                    streetAddress: $scope.paymentData.billingAddress.streetAddress,
+                                    extendedAddress: $scope.paymentData.billingAddress.extendedAddress,
+                                    locality: $scope.paymentData.billingAddress.locality,
+                                    region: $scope.paymentData.billingAddress.region,
+                                    postalCode: $scope.paymentData.billingAddress.postalCode
+                                }
+                            }, function (err, nonce) {
+                                // Send nonce to your server
+                                console.log(err); // Always null, even if credit card number is empty - Why?
+                                console.log(nonce); // Always present - Why?
+
+                                // Send nonce to backend
+                                PaymentAPI.post({'nonce': nonce}, function (data) {
+                                    initController();
+                                }, function (response) {
+                                    $ionicPopup.alert({
+                                        title: "Credit card declined",
+                                        template: response.data.errors.join("\n"),
+                                        buttons: [{
+                                            text: "OK",
+                                            type: "button-clear"
+                                        }]
+                                    })
+                                })
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        initController();
     })
 ;
