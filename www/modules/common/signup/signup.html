@@ -7,14 +7,26 @@
         <form ng-submit="trySignup(signupForm)" name="signupForm">
             <div class="list">
                 <label class="item item-input">
+                    <input type="text" placeholder="First Name" ng-model="signupData.firstName">
+                </label>
+                <label class="item item-input">
+                    <input type="text" placeholder="Last Name" ng-model="signupData.lastName">
+                </label>
+                <label class="item item-input">
+                    <input type="text" placeholder="Phone" ng-model="signupData.phone">
+                </label>
+                <label class="item item-input">
                     <input type="text" placeholder="Email" ng-model="signupData.email">
+                </label>
+                <label class="item item-input">
+                    <input type="text" placeholder="Zip" ng-model="signupData.zip">
                 </label>
                 <label class="item item-input">
                     <input type="password" placeholder="Password" ng-model="signupData.password">
                 </label>
 
                 <div class="button-bar">
-                    <button class="button button-block button-positive" type="submit">Signup</button>
+                    <button class="button button-block button-positive" type="submit">Next</button>
                 </div>
             </div>
         </form>

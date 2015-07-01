@@ -8,6 +8,11 @@ angular.module('emve')
                 templateUrl: "modules/common/signup/signup.html",
                 controller: "SignupCtrl"
             })
+            .state('signup-activate', {
+                url: "/signup-activate",
+                templateUrl: "modules/common/signup/signup-activate.html",
+                controller: "SignupActivateCtrl"
+            })
             .state('signup-success', {
                 url: "/signup-success",
                 templateUrl: "modules/common/signup/signup-success.html",
@@ -16,24 +21,33 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('SignupCtrl', function ($scope, $http, $state, $ionicPopup, API_URL) {
+    .controller('SignupCtrl', function ($scope, SignupAPI, $state, $ionicPopup, $localstorage) {
         $scope.signupData = {};
 
         $scope.trySignup = function () {
-            $http.post(API_URL + '/register', $scope.signupData)
-                .success(function (data) {
-                    $state.go('signup-success');
-                })
-                .error(function (data, status, headers, config) {
-                    $ionicPopup.alert({
-                        title: 'Error signing up',
-                        template: 'Check your email and password',
-                        buttons: [{
-                            text: 'OK',
-                            type: 'button-clear'
-                        }]
-                    });
-                });
+            SignupAPI.signup($scope.signupData, function (data) {
+                    $localstorage.set('tempUserId', data.tempUserId);
+                    $state.go('signup-activate');
+                }, function (response) {
+                $scope.errors = response.data.errors;
+            });
+        }
+    })
+    .controller('SignupActivateCtrl', function ($scope, $state, $ionicPopup, $localstorage, SignupAPI) {
+        var tempUserId = $localstorage.get('tempUserId', false);
+
+        if (!tempUserId) {
+            $state.go('signup');
+        }
+
+        $scope.activateData = {};
+        $scope.activateData.tempUserId = tempUserId;
+
+        $scope.tryActivate = function () {
+            SignupAPI.activate($scope.activateData, function (data) {
+                $localstorage.set('tempUserId', null);
+                $state.go('signup-success');
+            });
         }
     })
 ;

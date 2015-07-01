@@ -41,6 +41,10 @@ angular.module('emve.services', ['ngResource'])
                     $rootScope.$state.go('login');
                 }
 
+                if (response.status === 422) {
+                    $rootScope.$broadcast('http_error:422', response);
+                }
+
                 return $q.reject(response);
             }
         };
@@ -184,5 +188,17 @@ angular.module('emve.services', ['ngResource'])
                 method: 'POST'
             }
         });
+    })
+    .factory('SignupAPI', function ($resource, API_URL) {
+        return $resource(API_URL + '/signup', {}, {
+            signup: {
+                method: 'POST',
+                params: {act: 'signup'}
+            },
+            activate: {
+                method: 'POST',
+                params: {act: 'activate'}
+            },
+        })
     })
 ;

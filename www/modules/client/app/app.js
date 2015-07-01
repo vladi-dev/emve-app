@@ -15,7 +15,7 @@ angular.module('emve')
 angular.module('emve.controllers')
     .controller('AppCtrl', function ($rootScope, $scope, CurrentUser, ClientOrders) {
         var u = CurrentUser.get();
-        $scope.name = u.first_name + ' ' + u.middle_name + ' ' + u.last_name;
+        $scope.name = u.name;
 
         ClientOrders.get({'view': 'current'}, function (data) {
             $scope.curr_orders = data.orders;

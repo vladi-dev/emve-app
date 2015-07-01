@@ -35,6 +35,23 @@ angular.module('emve', ['ionic', 'ngCordova', 'emve.controllers', 'emve.services
                 $ionicLoading.hide();
             });
 
+            $rootScope.$on('http_error:422', function (event, response) {
+                var template = '';
+                angular.forEach(response.data.errors, function (value, key) {
+                    template += value;
+                    template += "<br>";
+                });
+
+                $ionicPopup.alert({
+                    title: 'Error',
+                    template: template,
+                    buttons: [{
+                        text: 'OK',
+                        type: 'button-clear'
+                    }]
+                });
+            });
+
             $rootScope.enableBackButton = false;
 
             $rootScope.$on('websocket:start', function () {
