@@ -68,16 +68,9 @@ angular.module('emve')
     });
 
 angular.module('emve.controllers')
-    .controller('SettingsCtrl', function ($rootScope, $scope, $window, $state, $localstorage, CurrentUser) {
+    .controller('SettingsCtrl', function ($scope, CurrentUser) {
         $scope.user = CurrentUser.get();
-        $scope.doLogout = function () {
-            $localstorage.set('token', null);
-
-            $rootScope.$emit('websocket:close');
-
-
-            $state.go('splash');
-        }
+        $scope.doLogout = CurrentUser.doLogout;
     })
     .controller('SettingsNameCtrl', function ($scope, $http, $ionicPopup, UserAPI, flash) {
         $scope.showFeedback = false;

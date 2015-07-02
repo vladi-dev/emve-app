@@ -14,6 +14,9 @@ angular.module('emve.services', ['ngResource'])
             },
             getObject: function(key) {
                 return JSON.parse($window.localStorage[key] || '{}');
+            },
+            removeItem: function (key) {
+                return $window.localStorage.removeItem(key);
             }
         }
     }])
@@ -24,7 +27,7 @@ angular.module('emve.services', ['ngResource'])
 
                 config.headers = config.headers || {};
                 var token = $localstorage.get('token');
-                if (token !== 'null' || token !== 'undefined') {
+                if (token) {
                     config.headers.Authorization = 'JWT ' + token;
                 }
                 return config;
@@ -49,13 +52,32 @@ angular.module('emve.services', ['ngResource'])
             }
         };
     })
-    .factory('CurrentUser', function ($localstorage) {
+    .factory('CurrentUser', function ($rootScope, $state, $localstorage, UserAPI) {
+        var currentUserKey = 'curentUser';
+
         return {
             get: function () {
-                return $localstorage.getObject('current_user');
+                return $localstorage.getObject(currentUserKey);
             },
-            set: function (currentUser) {
-                return $localstorage.setObject('current_user', currentUser);
+            doLogin: function (token) {
+                // Set JWT token
+                $localstorage.set('token', token);
+
+                var deffered = UserAPI.get({}, function (user) {
+                    $localstorage.setObject(currentUserKey, user);
+
+                    $rootScope.$emit('websocket:start');
+                });
+
+                return deffered.$promise;
+            },
+            doLogout: function () {
+                $rootScope.$emit('websocket:close');
+
+                $localstorage.removeItem('token');
+                $localstorage.removeItem(currentUserKey);
+
+                $state.go('splash');
             }
         }
     })
@@ -198,7 +220,35 @@ angular.module('emve.services', ['ngResource'])
             activate: {
                 method: 'POST',
                 params: {act: 'activate'}
+            }
+        });
+    })
+    .factory('SignupHelper', function ($localstorage) {
+        /**
+         * tempUserId is user id stored in redis and used to activate account
+         * signupAsMavenFlag flag helps to redirect user to "signup as maven" after account activation
+         */
+        var tempUserIdKey = 'tempUserId', signupAsMavenFlagKey = 'signupAsMavenFlag';
+
+        return {
+            getTempUserId: function () {
+                return $localstorage.get(tempUserIdKey);
             },
-        })
+            setTempUserId: function (tempUserId) {
+                if (!tempUserId) {
+                    return $localstorage.removeItem(tempUserIdKey);
+                }
+                return $localstorage.set(tempUserIdKey, tempUserId);
+            },
+            getSignupAsMavenFlag: function () {
+                return $localstorage.get(signupAsMavenFlagKey);
+            },
+            setSignupAsMavenFlag: function (signupAsMavenFlag) {
+                if (!signupAsMavenFlag) {
+                    return $localstorage.removeItem(signupAsMavenFlagKey);
+                }
+                return $localstorage.set(signupAsMavenFlagKey, signupAsMavenFlag);
+            }
+        }
     })
 ;

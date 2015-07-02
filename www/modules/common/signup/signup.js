@@ -4,7 +4,7 @@ angular.module('emve')
     .config(function ($stateProvider) {
         $stateProvider
             .state('signup', {
-                url: "/signup",
+                url: "/signup?asMaven",
                 templateUrl: "modules/common/signup/signup.html",
                 controller: "SignupCtrl"
             })
@@ -21,20 +21,27 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('SignupCtrl', function ($scope, SignupAPI, $state, $ionicPopup, $localstorage) {
+    .controller('SignupCtrl', function ($scope, $state, $stateParams, $ionicPopup, $localstorage, SignupAPI, SignupHelper) {
+        if ($stateParams.asMaven) {
+            SignupHelper.setSignupAsMavenFlag(1);
+        } else {
+            SignupHelper.setSignupAsMavenFlag(null);
+        }
+
         $scope.signupData = {};
 
         $scope.trySignup = function () {
             SignupAPI.signup($scope.signupData, function (data) {
-                    $localstorage.set('tempUserId', data.tempUserId);
+                    SignupHelper.setTempUserId(data.tempUserId);
+
                     $state.go('signup-activate');
                 }, function (response) {
                 $scope.errors = response.data.errors;
             });
         }
     })
-    .controller('SignupActivateCtrl', function ($scope, $state, $ionicPopup, $localstorage, SignupAPI) {
-        var tempUserId = $localstorage.get('tempUserId', false);
+    .controller('SignupActivateCtrl', function ($scope, $state, $ionicPopup, $localstorage, SignupAPI, SignupHelper, CurrentUser) {
+        var tempUserId = SignupHelper.getTempUserId();
 
         if (!tempUserId) {
             $state.go('signup');
@@ -45,8 +52,20 @@ angular.module('emve.controllers')
 
         $scope.tryActivate = function () {
             SignupAPI.activate($scope.activateData, function (data) {
-                $localstorage.set('tempUserId', null);
-                $state.go('signup-success');
+                var signupAsMaven = SignupHelper.getSignupAsMavenFlag();
+
+                SignupHelper.setTempUserId(null);
+
+                var promise = CurrentUser.doLogin(data.token);
+
+                promise.then(function (user) {
+                    if (signupAsMaven) {
+                        console.log('signup-maven');
+                        $state.go('signup-maven');
+                    } else {
+                        $state.go('client.custom-order');
+                    }
+                });
             });
         }
     })
