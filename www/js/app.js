@@ -36,11 +36,11 @@ angular.module('emve', ['ionic', 'ngCordova', 'emve.controllers', 'emve.services
             });
 
             $rootScope.$on('http_error:422', function (event, response) {
-                var template = '';
+                var template = '<ul>';
                 angular.forEach(response.data.errors, function (value, key) {
-                    template += value;
-                    template += "<br>";
+                    template += '<li>* ' + value + '</li>';
                 });
+                template += '</ul>';
 
                 $ionicPopup.alert({
                     title: 'Error',
