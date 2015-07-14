@@ -1,0 +1,35 @@
+<ion-view view-title="Maven Signup" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-left" ng-click="$state.go('maven-signup-splash')">Back</button>
+    </ion-nav-buttons>
+
+    <ion-content has-header="true" padding="true">
+        <form ng-submit="tryStep1()">
+            <div class="list">
+                <label class="item item-input">
+                    <input type="text" placeholder="Social Security #" ng-model="mavenSignupStep1Data.ssn">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" placeholder="Driver's License #" ng-model="mavenSignupStep1Data.dl">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" placeholder="Date of Birth" ng-model="mavenSignupStep1Data.dob">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" placeholder="Sex" ng-model="mavenSignupStep1Data.sex">
+                </label>
+
+                <label class="item item-input">
+                    <input type="text" placeholder="Felony" ng-model="mavenSignupStep1Data.felony">
+                </label>
+
+                <div class="button-bar">
+                    <button class="button button-block button-positive" type="submit">Next</button>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

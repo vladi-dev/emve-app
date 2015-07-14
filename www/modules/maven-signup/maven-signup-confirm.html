@@ -1,0 +1,57 @@
+<ion-view view-title="Maven Signup Confirm" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-left" ng-click="$state.go('maven-signup-step2')">Back</button>
+    </ion-nav-buttons>
+
+    <ion-content has-header="true" padding="true">
+        <form ng-submit="tryConfirm()">
+            <div class="list">
+                <div class="item item-divider">
+                    Information
+                </div>
+
+                <div class="item">
+                    <h2>Social security number</h2>
+                    <p>{{mavenSignup.ssn}}</p>
+                </div>
+
+                <div class="item">
+                    <h2>Driver's License</h2>
+                    <p>{{mavenSignup.dl}}</p>
+                </div>
+
+                <div class="item">
+                    <h2>Date of Birth</h2>
+                    <p>{{mavenSignup.dob}}</p>
+                </div>
+
+                <div class="item">
+                    <h2>Sex</h2>
+                    <p>{{mavenSignup.sex}}</p>
+                </div>
+
+                <div class="item">
+                    <h2>Felony</h2>
+                    <p>{{mavenSignup.felony}}</p>
+                </div>
+
+
+                <div class="item item-divider">
+                    Bank account
+                </div>
+                <div class="item">
+                    <h2>Account Number</h2>
+                    <p>{{mavenSignup.account}}</p>
+                </div>
+                <div class="item">
+                    <h2>Routing Number</h2>
+                    <p>{{mavenSignup.routing}}</p>
+                </div>
+
+                <div class="button-bar">
+                    <button class="button button-block button-positive" type="submit">Confirm</button>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

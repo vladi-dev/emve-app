@@ -60,8 +60,7 @@ angular.module('emve.controllers')
 
                 promise.then(function (user) {
                     if (signupAsMaven) {
-                        console.log('signup-maven');
-                        $state.go('signup-maven');
+                        $state.go('maven-signup-splash');
                     } else {
                         $state.go('client.custom-order');
                     }

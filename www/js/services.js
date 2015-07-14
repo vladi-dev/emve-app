@@ -251,4 +251,36 @@ angular.module('emve.services', ['ngResource'])
             }
         }
     })
+    .factory('MavenSignupAPI', function ($resource, API_URL) {
+        return $resource(API_URL + '/maven/signup/:id', {id: '@id'}, {
+            step1: {
+                method: 'POST',
+                params: {act: 'step1'}
+            },
+            step2: {
+                method: 'POST',
+                params: {act: 'step2'}
+            },
+            confirm: {
+                method: 'POST',
+                params: {act: 'confirm'}
+            }
+        })
+    })
+    .factory('MavenSignupHelper', function ($localstorage) {
+        var tempMavenSignupIdKey = 'tempMavenSignupId';
+
+        return {
+            getTempMavenSignupId: function () {
+                return $localstorage.get(tempMavenSignupIdKey);
+            },
+            setTempMavenSignupId: function (tempMavenSignupId) {
+                if (!tempMavenSignupId) {
+                    return $localstorage.removeItem(tempMavenSignupIdKey);
+                }
+                return $localstorage.set(tempMavenSignupIdKey, tempMavenSignupId);
+            }
+        }
+    })
+
 ;
