@@ -39,7 +39,12 @@ angular.module('emve.controllers')
         var tempMavenSignupId = MavenSignupHelper.getTempMavenSignupId();
         if (tempMavenSignupId) {
             MavenSignupAPI.get({id: tempMavenSignupId}, function (data) {
-                $scope.mavenSignupStep1Data = data.signup;
+                if (data.signup) {
+                    $scope.mavenSignupStep1Data = data.signup;
+
+                    // Setting date
+                    $scope.mavenSignupStep1Data.dob = new Date(data.signup.dob);
+                }
             });
         }
 
@@ -86,6 +91,7 @@ angular.module('emve.controllers')
 
         $scope.tryConfirm = function () {
             MavenSignupAPI.confirm({id: tempMavenSignupId}, function (data) {
+                MavenSignupHelper.setTempMavenSignupId(null);
                 $state.go('maven-signup-success');
             }, function (response) {
                 $scope.errors = response.data.errors;
