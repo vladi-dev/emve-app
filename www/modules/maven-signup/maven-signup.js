@@ -36,6 +36,7 @@ angular.module('emve.controllers')
     .controller('MavenSignupStep1Ctrl', function ($scope, $state, MavenSignupAPI, MavenSignupHelper) {
         $scope.mavenSignupStep1Data = {dl: {state: 'CA'}};
 
+        // Get existing temp maven signup if exists
         var tempMavenSignupId = MavenSignupHelper.getTempMavenSignupId();
         if (tempMavenSignupId) {
             MavenSignupAPI.get({id: tempMavenSignupId}, function (data) {
@@ -50,7 +51,9 @@ angular.module('emve.controllers')
 
         $scope.tryStep1 = function () {
             MavenSignupAPI.step1($scope.mavenSignupStep1Data, function (data) {
+                // Save temp maven signup id for use in other steps
                 MavenSignupHelper.setTempMavenSignupId(data.tempMavenSignupId)
+
                 $state.go('maven-signup-step2');
             }, function (response) {
                 $scope.errors = response.data.errors;
@@ -60,6 +63,7 @@ angular.module('emve.controllers')
     .controller('MavenSignupStep2Ctrl', function ($scope, $state, MavenSignupAPI, MavenSignupHelper) {
         $scope.mavenSignupStep2Data = {};
 
+        // Get existing temp maven signup if exists
         var tempMavenSignupId = MavenSignupHelper.getTempMavenSignupId();
         if (tempMavenSignupId) {
             MavenSignupAPI.get({id: tempMavenSignupId}, function (data) {
@@ -70,7 +74,6 @@ angular.module('emve.controllers')
             $state.go('maven-signup-splash');
         }
 
-
         $scope.tryStep2 = function () {
             MavenSignupAPI.step2($scope.mavenSignupStep2Data, function (data) {
                 $state.go('maven-signup-confirm');
@@ -80,6 +83,7 @@ angular.module('emve.controllers')
         }
     })
     .controller('MavenSignupConfirmCtrl', function ($scope, $state, MavenSignupAPI, MavenSignupHelper) {
+        // Get existing temp maven signup if exists
         var tempMavenSignupId = MavenSignupHelper.getTempMavenSignupId();
         if (tempMavenSignupId) {
             MavenSignupAPI.get({id: tempMavenSignupId}, function (data) {
