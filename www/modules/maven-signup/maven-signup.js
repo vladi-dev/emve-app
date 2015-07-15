@@ -34,7 +34,7 @@ angular.module('emve.controllers')
     .controller('MavenSignupSplashCtrl', function () {
     })
     .controller('MavenSignupStep1Ctrl', function ($scope, $state, MavenSignupAPI, MavenSignupHelper) {
-        $scope.mavenSignupStep1Data = {};
+        $scope.mavenSignupStep1Data = {dl: {state: 'CA'}};
 
         var tempMavenSignupId = MavenSignupHelper.getTempMavenSignupId();
         if (tempMavenSignupId) {
