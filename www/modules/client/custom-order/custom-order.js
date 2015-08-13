@@ -26,29 +26,7 @@ angular.module('emve.controllers')
             ClientOrders.put($scope.customOrderData, function (data) {
                 $rootScope.$broadcast('client_order_new', data);
                 $state.go('client.curr-order-new', {orderId: data.order.id});
-            }, function (error) {
-                $ionicPopup.alert({
-                    title: error.data.error,
-                    template: error.data.error,
-                    buttons: [{
-                        text: 'OK',
-                        type: 'button-clear'
-                    }]
-                });
             });
-
-            //$http.put(API_URL + '/order', $scope.customOrderData).success(function (data) {
-            //    $rootScope.$broadcast('client_order_new', data);
-            //}).error(function (data) {
-            //    $ionicPopup.alert({
-            //        title: 'Error adding custom order',
-            //        template: 'Check - ' + data.errors._,
-            //        buttons: [{
-            //            text: 'OK',
-            //            type: 'button-clear'
-            //        }]
-            //    });
-            //});
         }
     })
 ;
