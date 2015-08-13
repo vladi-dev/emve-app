@@ -16,7 +16,11 @@
   },
   "cordovaPlugins": [
     "com.ionic.keyboard",
-    "cordova-plugin-device"
+    "cordova-plugin-device",
+    {
+      "locator": "https://github.com/phonegap-build/PushPlugin.git",
+      "id": "com.phonegap.plugins.PushPlugin"
+    }
   ],
   "cordovaPlatforms": [
     {
