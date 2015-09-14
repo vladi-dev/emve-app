@@ -11,7 +11,7 @@ angular.module('emve')
 ;
 
 angular.module('emve.controllers')
-    .controller('LoginCtrl', function ($scope, $http, $state, $ionicPopup, API_URL, CurrentUser) {
+    .controller('LoginCtrl', function ($scope, $http, $state, $ionicPopup, $cordovaPush, API_URL, GCM_SENDER_ID, CurrentUser) {
         $scope.loginData = {};
 
         $scope.tryLogin = function () {
@@ -20,6 +20,14 @@ angular.module('emve.controllers')
                     var promise = CurrentUser.doLogin(data.token);
 
                     promise.then(function (user) {
+                        // Register with GCM
+                        $cordovaPush.register({"senderID": GCM_SENDER_ID}).then(function(result) {
+                            // Success
+                            console.log('Registered with GCM');
+                        }, function(err) {
+                            // Error
+                        });
+
                         if (user.is_maven) {
                             $state.go('maven.map');
                         } else {

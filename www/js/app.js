@@ -65,6 +65,35 @@ angular.module('emve', ['ionic','ngCordova',  'emve.controllers', 'emve.services
             });
 
             $rootScope.$emit('websocket:start');
+
+            // Listen to GCM notifications
+            $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+                console.log('Notification Received', 'test')
+                console.log(event);
+                console.log(notification);
+                switch(notification.event) {
+                    case 'registered':
+                        if (notification.regid.length > 0 ) {
+                            // Send regid to backend
+                            console.log('registration ID = ' + notification.regid);
+                            console.log(notification.regid)
+                        }
+                        break;
+
+                    case 'message':
+                        // this is the actual push notification. its format depends on the data model from the push server
+                        console.log('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+                        break;
+
+                    case 'error':
+                        console.log('GCM error = ' + notification.msg);
+                        break;
+
+                    default:
+                        console.log('An unknown GCM event has occurred');
+                        break;
+                }
+            });
         });
     })
     .config(function ($ionicConfigProvider, $stateProvider, $urlRouterProvider, $httpProvider) {
@@ -75,9 +104,10 @@ angular.module('emve', ['ionic','ngCordova',  'emve.controllers', 'emve.services
         $httpProvider.interceptors.push('authInterceptor');
         $urlRouterProvider.otherwise('/');
     })
-    .constant('API_URL', 'http://emve.dev:5000/api')
-    .constant('WEBSOCKET_URL', 'ws://emve.dev:5000/websocket')
+    //.constant('API_URL', 'http://emve.dev:5000/api')
+    //.constant('WEBSOCKET_URL', 'ws://emve.dev:5000/websocket')
 
-    //.constant('API_URL', 'http://emvela.com/api')
-    //.constant('WEBSOCKET_URL', 'ws://emvela.com/websocket')
+    .constant('API_URL', 'http://emvela.com/api')
+    .constant('WEBSOCKET_URL', 'ws://emvela.com/websocket')
+    .constant('GCM_SENDER_ID', "460063649586")
 ;

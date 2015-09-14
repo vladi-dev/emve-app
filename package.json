@@ -20,12 +20,13 @@
     {
       "locator": "https://github.com/phonegap-build/PushPlugin.git",
       "id": "com.phonegap.plugins.PushPlugin"
+    },
+    {
+      "locator": "https://github.com/apache/cordova-plugin-whitelist.git",
+      "id": "cordova-plugin-whitelist"
     }
   ],
   "cordovaPlatforms": [
-    {
-      "platform": "android",
-      "locator": "browser"
-    }
+    "android"
   ]
 }
