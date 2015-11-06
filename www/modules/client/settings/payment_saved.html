@@ -1,12 +1,11 @@
 <div class="list card">
 
     <div class="item item-avatar">
-        <img src="{{paymentMethod.image_url}}">
 
         <h2>{{paymentMethod.card_type}}</h2>
 
-        <p>{{paymentMethod.bin}}******{{paymentMethod.last_4}}</p>
-        <p>Expires: {{paymentMethod.expiration_month}}/{{paymentMethod.expiration_year}}</p>
+        <p>**** **** **** {{paymentMethod.last4}}</p>
+        <p>Expires: {{paymentMethod.exp_month}}/{{paymentMethod.exp_year}}</p>
 
         <p><button class="button button-assertive" ng-click="tryDeletePayment()">Delete</button></p>
     </div>
