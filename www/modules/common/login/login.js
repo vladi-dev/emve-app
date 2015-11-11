@@ -21,12 +21,16 @@ angular.module('emve.controllers')
 
                     promise.then(function (user) {
                         // Register with GCM
-                        $cordovaPush.register({"senderID": GCM_SENDER_ID}).then(function(result) {
-                            // Success
-                            console.log('Registered with GCM');
-                        }, function(err) {
-                            // Error
-                        });
+                        try{
+                            $cordovaPush.register({"senderID": GCM_SENDER_ID}).then(function(result) {
+                                // Success
+                                console.log('Registered with GCM');
+                            }, function(err) {
+                                // Error
+                            });
+                        } catch(err) {
+                            console.log(err);
+                        }
 
                         if (user.is_maven) {
                             $state.go('maven.map');

@@ -89,10 +89,12 @@ angular.module('emve.controllers')
                 $ionicPopup.alert({
                     title: 'Error updating phone',
                     template: 'Check',
-                    buttons: [{
-                        text: 'OK',
-                        type: 'button-clear'
-                    }]
+                    buttons: [
+                        {
+                            text: 'OK',
+                            type: 'button-clear'
+                        }
+                    ]
                 });
             });
         }
@@ -111,10 +113,12 @@ angular.module('emve.controllers')
                 $ionicPopup.alert({
                     title: 'Error updating phone',
                     template: 'Check',
-                    buttons: [{
-                        text: 'OK',
-                        type: 'button-clear'
-                    }]
+                    buttons: [
+                        {
+                            text: 'OK',
+                            type: 'button-clear'
+                        }
+                    ]
                 });
             });
         }
@@ -135,10 +139,12 @@ angular.module('emve.controllers')
                 $ionicPopup.alert({
                     title: 'Error deleting address',
                     template: 'Check',
-                    buttons: [{
-                        text: 'OK',
-                        type: 'button-clear'
-                    }]
+                    buttons: [
+                        {
+                            text: 'OK',
+                            type: 'button-clear'
+                        }
+                    ]
                 });
             });
         }
@@ -227,83 +233,74 @@ angular.module('emve.controllers')
                 $ionicPopup.alert({
                     title: 'Error adding address',
                     template: 'Check',
-                    buttons: [{
-                        text: 'OK',
-                        type: 'button-clear'
-                    }]
+                    buttons: [
+                        {
+                            text: 'OK',
+                            type: 'button-clear'
+                        }
+                    ]
                 });
             });
         }
     })
-    .controller('SettingsPaymentCtrl', function ($scope, $ionicPopup, PaymentAPI, $state) {
-
+    .controller('SettingsPaymentCtrl', function ($scope, $ionicPopup, PaymentAPI, $state, stripe) {
         var initController = function () {
+            $scope.paymentData = {};
+            $scope.paymentExists = false;
+            $scope.paymentMethod = {};
+
             PaymentAPI.get({}, function (data) {
-                if (data.payment_method !== void 0) {
-                    $scope.paymentExists = true;
-                    $scope.paymentMethod = data.payment_method;
-
-                    $scope.tryDeletePayment = function () {
-                        PaymentAPI.delete({}, function (data) {
-                            initController();
-                        }, function (response) {
-                            $ionicPopup.alert({
-                                title: 'Error',
-                                template: response.data.errors.join("\n"),
-                                buttons: [{
-                                    text: 'OK',
-                                    type: 'button-clear'
-                                }]
-                            });
-                        });
-                    }
-                } else {
-                    $scope.paymentExists = false;
-                    $scope.paymentData = {};
-
-                    // Get client token from backend
-                    PaymentAPI.get({'act': 'get_token'}, function (data) {
-                        var client = new braintree.api.Client({clientToken: data.token});
-
-                        $scope.connectPayment = function () {
-
-                            client.tokenizeCard({
-                                number: $scope.paymentData.number,
-                                cardholderName: $scope.paymentData.cardholderName,
-                                expirationDate: $scope.paymentData.expirationDate,
-                                cvv: $scope.paymentData.cvv,
-                                billingAddress: {
-                                    firstName: $scope.paymentData.billingAddress.firstName,
-                                    lastName: $scope.paymentData.billingAddress.lastName,
-                                    streetAddress: $scope.paymentData.billingAddress.streetAddress,
-                                    extendedAddress: $scope.paymentData.billingAddress.extendedAddress,
-                                    locality: $scope.paymentData.billingAddress.locality,
-                                    region: $scope.paymentData.billingAddress.region,
-                                    postalCode: $scope.paymentData.billingAddress.postalCode
-                                }
-                            }, function (err, nonce) {
-                                // Send nonce to your server
-                                console.log(err); // Always null, even if credit card number is empty - Why?
-                                console.log(nonce); // Always present - Why?
-
-                                // Send nonce to backend
-                                PaymentAPI.post({'nonce': nonce}, function (data) {
-                                    initController();
-                                }, function (response) {
-                                    $ionicPopup.alert({
-                                        title: "Credit card declined",
-                                        template: response.data.errors.join("\n"),
-                                        buttons: [{
-                                            text: "OK",
-                                            type: "button-clear"
-                                        }]
-                                    })
-                                })
-                            });
-                        }
-                    });
-                }
+                $scope.paymentExists = true;
+                $scope.paymentMethod = data.payment_method;
+                console.log($scope.paymentMethod);
+            }, function () {
             });
+
+            $scope.tryDeletePayment = function () {
+                PaymentAPI.delete({}, function (data) {
+                    initController();
+                }, function (response) {
+                    $ionicPopup.alert({
+                        title: 'Error',
+                        template: response.data.errors.join("\n"),
+                        buttons: [
+                            {
+                                text: 'OK',
+                                type: 'button-clear'
+                            }
+                        ]
+                    });
+                });
+            }
+
+            $scope.connectPayment = function () {
+
+                stripe.card.createToken({
+                    number: $scope.paymentData.number,
+                    exp_month: $scope.paymentData.expMonth,
+                    exp_year: $scope.paymentData.expYear,
+                    cvc: $scope.paymentData.cvc
+                })
+                    .then(function (token) {
+                        console.log('token created for card ending in ', token.card.last4);
+                        console.log(token);
+                        PaymentAPI.post({'token': token.id}, function (data) {
+                            initController();
+                        })
+                    })
+                    .catch(function (err) {
+                        $ionicPopup.alert({
+                            title: "Credit card declined",
+                            template: "Invalid data",
+                            buttons: [
+                                {
+                                    text: "OK",
+                                    type: "button-clear"
+                                }
+                            ]
+                        })
+                    });
+            }
         }
 
         initController();

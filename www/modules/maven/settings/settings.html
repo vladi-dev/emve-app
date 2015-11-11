@@ -1,0 +1,42 @@
+<ion-view view-title="Settings" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <div class="list">
+            <div class="item item-divider">
+                Your profile
+            </div>
+            <a class="item item-icon-left" ui-sref="maven.settings-name">
+                <i class="icon ion-person dark"></i>
+                Change name
+            </a>
+            <a class="item item-icon-left" ui-sref="maven.settings-phone">
+                <i class="icon ion-ios-telephone dark"></i>
+                Phone number
+            </a>
+            <a class="item item-icon-left" ui-sref="maven.settings-bank-account">
+                <i class="icon ion-card dark"></i>
+                Bank Account
+            </a>
+
+            <div class="item item-divider">
+                Your account
+            </div>
+            <a class="item item-icon-left" href="">
+                <i class="icon ion-at dark"></i>
+                Change email
+            </a>
+            <a class="item item-icon-left" href="">
+                <i class="icon ion-locked dark"></i>
+                Change password
+            </a>
+            <a class="item item-icon-left" ng-click="doLogout();">
+                <i class="icon ion-log-out dark"></i>
+                Logout
+            </a>
+
+        </div>
+    </ion-content>
+</ion-view>

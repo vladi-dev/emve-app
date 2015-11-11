@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('emve', ['ionic','ngCordova',  'emve.controllers', 'emve.services', 'flash', 'leaflet-directive'])
+angular.module('emve', ['ionic','ngCordova',  'emve.controllers', 'emve.services', 'flash', 'leaflet-directive', 'angular-stripe'])
     .run(function ($ionicPlatform, $rootScope, $state, $window, $stateParams, $ionicLoading, WebsocketService, $ionicPopup, $cordovaNetwork) {
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -96,16 +96,18 @@ angular.module('emve', ['ionic','ngCordova',  'emve.controllers', 'emve.services
             });
         });
     })
-    .config(function ($ionicConfigProvider, $stateProvider, $urlRouterProvider, $httpProvider) {
+    .config(function ($ionicConfigProvider, $stateProvider, $urlRouterProvider, $httpProvider, stripeProvider) {
         $ionicConfigProvider.templates.maxPrefetch(0);
         $ionicConfigProvider.views.maxCache(0);
         $ionicConfigProvider.views.transition('none');
         $ionicConfigProvider.tabs.position('bottom');
         $httpProvider.interceptors.push('authInterceptor');
         $urlRouterProvider.otherwise('/');
+
+        stripeProvider.setPublishableKey("pk_test_VBIBc0OTGN2VCOkUJG2O9pmT");
     })
-    //.constant('API_URL', 'http://emve.dev:5000/api')
-    //.constant('WEBSOCKET_URL', 'ws://emve.dev:5000/websocket')
+//    .constant('API_URL', 'http://emve.dev:5000/api')
+//    .constant('WEBSOCKET_URL', 'ws://emve.dev:5000/websocket')
 
     .constant('API_URL', 'http://emvela.com/api')
     .constant('WEBSOCKET_URL', 'ws://emvela.com/websocket')
