@@ -1,0 +1,22 @@
+<ion-view view-title="" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-left" ng-click="$state.go('client.settings')"
+                nav-direction="back">Phone number
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <flash:messages></flash:messages>
+        <form ng-submit="tryUpdatePhone(updatePhoneForm)" name="updatePhoneForm" novalidate="">
+            <div class="list">
+                <label class="item item-input">
+                    <input type="text" name="phone" placeholder="Phone" ng-model="userData.phone">
+                </label>
+
+                <div>
+                    <button class="button button-block button-positive" type="submit">Update phone</button>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

@@ -106,10 +106,10 @@ angular.module('emve', ['ionic','ngCordova',  'emve.controllers', 'emve.services
 
         stripeProvider.setPublishableKey("pk_test_VBIBc0OTGN2VCOkUJG2O9pmT");
     })
-    .constant('API_URL', 'http://emve.dev:5000/api')
-    .constant('WEBSOCKET_URL', 'ws://emve.dev:5000/websocket')
+//    .constant('API_URL', 'http://emve.dev:5000/api')
+//    .constant('WEBSOCKET_URL', 'ws://emve.dev:5000/websocket')
 
-//    .constant('API_URL', 'http://emvela.com/api')
-//    .constant('WEBSOCKET_URL', 'ws://emvela.com/websocket')
+    .constant('API_URL', 'http://emvela.com/api')
+    .constant('WEBSOCKET_URL', 'ws://emvela.com/websocket')
     .constant('GCM_SENDER_ID', "460063649586")
 ;

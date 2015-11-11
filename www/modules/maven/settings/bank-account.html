@@ -1,0 +1,13 @@
+<ion-view view-title="" hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon icon ion-ios-arrow-left" ng-click="$state.go('client.settings')"
+                nav-direction="back">Bank Account
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content>
+
+        <div ng-include src="'modules/maven/settings/bank_account_'+ (accountExists ? 'saved' : 'add')  + '.html'"></div>
+
+    </ion-content>
+</ion-view>
