@@ -20,6 +20,24 @@ angular.module('emve')
                     }
                 }
             })
+            .state('maven.settings-address', {
+                url: "/settings/address",
+                views: {
+                    'menuContent': {
+                        templateUrl: "modules/maven/settings/address.html",
+                        controller: "MavenSettingsAddressCtrl"
+                    }
+                }
+            })
+            .state('maven.settings-personal-info', {
+                url: "/settings/personal-info",
+                views: {
+                    'menuContent': {
+                        templateUrl: "modules/maven/settings/personal-info.html",
+                        controller: "MavenSettingsPersonalInfoCtrl"
+                    }
+                }
+            })
             .state('maven.settings-bank-account', {
                 url: "/settings/bank-account",
                 views: {
@@ -60,66 +78,13 @@ angular.module('emve.controllers')
             });
         }
     })
-    .controller('MavenSettingsBankAccountCtrl', function ($scope, $ionicPopup, PaymentAPI, $state, stripe) {
-        var initController = function () {
-            $scope.bankAccountData = {};
-            $scope.bankAccountExists = false;
-            $scope.bankAccount = {};
-
-            PaymentAPI.get({}, function (data) {
-                $scope.bankAccountExists = true;
-                $scope.bankAccount = data.bank_account;
-            }, function () {
-            });
-
-            $scope.tryDeletePayment = function () {
-                PaymentAPI.delete({}, function (data) {
-                    initController();
-                }, function (response) {
-                    $ionicPopup.alert({
-                        title: 'Error',
-                        template: response.data.errors.join("\n"),
-                        buttons: [
-                            {
-                                text: 'OK',
-                                type: 'button-clear'
-                            }
-                        ]
-                    });
-                });
-            }
-
-            $scope.connectBankAccount = function () {
-
-                stripe.bankAccount.createToken({
-                    routing_number: $scope.bankAccountData.routing_number,
-                    account_number: $scope.bankAccountData.account_number,
-                    country: "US",
-                    currency: "USD"
-                })
-                    .then(function (token) {
-                        console.log('token created for card ending in ', token.card.last4);
-                        console.log(token);
-                        PaymentAPI.post({'token': token.id}, function (data) {
-                            initController();
-                        })
-                    })
-                    .catch(function (err) {
-                        console.log(err)
-                        $ionicPopup.alert({
-                            title: "Credit card declined",
-                            template: err.message,
-                            buttons: [
-                                {
-                                    text: "OK",
-                                    type: "button-clear"
-                                }
-                            ]
-                        })
-                    });
-            }
-        }
-
-        initController();
+    .controller('MavenSettingsAddressCtrl', function ($scope, CurrentUser) {
+        $scope.mavenAccount = CurrentUser.get().maven_account;
+    })
+    .controller('MavenSettingsPersonalInfoCtrl', function ($scope, CurrentUser) {
+        $scope.mavenAccount = CurrentUser.get().maven_account;
+    })
+    .controller('MavenSettingsBankAccountCtrl', function ($scope, CurrentUser) {
+        $scope.mavenAccount = CurrentUser.get().maven_account;
     })
 ;

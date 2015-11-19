@@ -9,15 +9,27 @@
 
         <div class="list">
             <div class="item item-divider">
-                Bank Account
+                Personal Info
             </div>
 
             <label class="item item-input">
-                Routing Number: {{ mavenAccount.routing }}
+                Sex: {{ mavenAccount.sex }}
             </label>
 
             <label class="item item-input">
-                Account Number: {{ mavenAccount.account }}
+                Driver's License State: {{ mavenAccount.dl_state }}
+            </label>
+
+            <label class="item item-input">
+                Driver's License #: {{ mavenAccount.dl_number }}
+            </label>
+
+            <label class="item item-input">
+                Social Security Number: ***-**-{{ mavenAccount.ssn_last4 }}
+            </label>
+
+            <label class="item item-input">
+                Date of Birth: {{ mavenAccount.dob }}
             </label>
 
         </div>

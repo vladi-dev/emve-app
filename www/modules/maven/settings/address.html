@@ -1,22 +1,33 @@
 <ion-view view-title="" hide-back-button="true">
     <ion-nav-buttons side="left">
-        <button class="button button-icon icon ion-ios-arrow-left" ng-click="$state.go('client.settings')"
-                nav-direction="back">Addresses
+        <button class="button button-icon icon ion-ios-arrow-left" ng-click="$state.go('maven.settings')"
+                nav-direction="back">Back
         </button>
     </ion-nav-buttons>
 
-    <ion-nav-buttons side="right">
-        <button class="button button-icon icon ion-ios-plus-empty" ng-click="$state.go('client.settings-add-address')"> Add</button>
-    </ion-nav-buttons>
-
     <ion-content>
-        <flash:messages></flash:messages>
-        <ion-list>
-            <ion-item class="item-avatar" ng-repeat="a in addresses" type="item-text-wrap">
-                <h2>{{a.label}}</h2>
-                <p>{{a.address}}</p>
-                <p><button class="button button-assertive" ng-click="tryDeleteAddress($index)">Delete</button></p>
-            </ion-item>
-        </ion-list>
+        <div class="list">
+            <div class="item item-divider">
+                Address
+            </div>
+
+            <label class="item item-input">
+                Address: {{ mavenAccount.address }}
+            </label>
+
+            <label class="item item-input">
+                City: {{ mavenAccount.city }}
+            </label>
+
+            <label class="item item-input">
+                State: {{ mavenAccount.state }}
+            </label>
+
+            <label class="item item-input">
+                Zip: {{ mavenAccount.zip}}
+            </label>
+
+
+        </div>
     </ion-content>
 </ion-view>
