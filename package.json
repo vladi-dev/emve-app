@@ -1,7 +1,8 @@
 {
-  "name": ".",
+  "name": "emve-app",
   "version": "1.0.0",
   "description": ".: An Ionic project",
+  "private": true,
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^0.7.1",

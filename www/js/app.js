@@ -35,6 +35,17 @@ angular.module('emve', ['ionic','ngCordova',  'emve.controllers', 'emve.services
                 $ionicLoading.hide();
             });
 
+            $rootScope.$on('http_error:400', function (event, response) {
+                $ionicPopup.alert({
+                    title: "Error occured",
+                    template: response.data.error,
+                    buttons: [{
+                        text: 'OK',
+                        type: 'button-clear'
+                    }]
+                });
+            });
+
             $rootScope.$on('http_error:422', function (event, response) {
                 var template = '<ul>';
                 angular.forEach(response.data.errors, function (value, key) {
@@ -106,10 +117,10 @@ angular.module('emve', ['ionic','ngCordova',  'emve.controllers', 'emve.services
 
         stripeProvider.setPublishableKey("pk_test_VBIBc0OTGN2VCOkUJG2O9pmT");
     })
-//    .constant('API_URL', 'http://emve.dev:5000/api')
-//    .constant('WEBSOCKET_URL', 'ws://emve.dev:5000/websocket')
+    .constant('API_URL', 'http://emve.dev:5000/api')
+    .constant('WEBSOCKET_URL', 'ws://emve.dev:5000/websocket')
 
-    .constant('API_URL', 'http://emvela.com/api')
-    .constant('WEBSOCKET_URL', 'ws://emvela.com/websocket')
+//    .constant('API_URL', 'http://emvela.com/api')
+//    .constant('WEBSOCKET_URL', 'ws://emvela.com/websocket')
     .constant('GCM_SENDER_ID', "460063649586")
 ;

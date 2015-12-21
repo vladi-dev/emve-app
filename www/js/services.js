@@ -44,6 +44,10 @@ angular.module('emve.services', ['ngResource'])
                     $rootScope.$state.go('login');
                 }
 
+                if (response.status === 400) {
+                    $rootScope.$broadcast('http_error:400', response);
+                }
+
                 if (response.status === 422) {
                     $rootScope.$broadcast('http_error:422', response);
                 }
